@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+#
+# format ports commits
+
+for pkg in *; {
+    [[ -d $pkg ]] && {
+        . "$pkg/Pkgfile" || {
+            echo "${0##*/} : can't source the Pkgfile for '$pkg'" >&2
+            exit 1
+        }
+
+        # compare versions
+        cur=$version-$release
+        var=$(prt-get printf %v-%r --filter="$pkg")
+
+        [[ $cur != "$var" ]] && {
+            git add "$pkg"
+            git commit -m "$name : $cur -> $var"
+        }
+    }
+}

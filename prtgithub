@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+#
+# check the ports that aren't sourced from github
+
+shopt -s globstar
+
+for file in **; {
+    [[ -f $file && $file =~ Pkgfile$ ]] && {
+        . "$file"
+
+        for source in "${source[@]}"; {
+            [[ $source =~ github\.com ]] && continue 2
+        }
+
+        echo "$file"
+    }
+}
+

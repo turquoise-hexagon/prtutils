@@ -1,0 +1,7 @@
+#!/bin/sh
+#
+# update port
+
+for opt in do us d uf us; do
+    fakeroot pkgmk -"$opt"
+done
