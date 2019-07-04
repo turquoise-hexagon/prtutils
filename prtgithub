@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# check the ports that aren't sourced from github
+# list ports that aren't sourced from github
 
 shopt -s globstar
 
@@ -15,4 +15,3 @@ for file in **; {
         echo "$file"
     }
 }
-
