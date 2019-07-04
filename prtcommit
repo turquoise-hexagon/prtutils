@@ -11,7 +11,7 @@ for pkg in *; {
 
         # compare versions
         cur=$version-$release
-        var=$(prt-get printf %v-%r --filter="$pkg")
+        var=$(prt-get printf %v-%r --filter="$name")
 
         [[ $cur != "$var" ]] && {
             git add "$pkg"
