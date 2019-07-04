@@ -12,6 +12,6 @@ for file in **; {
             [[ $source =~ github\.com ]] && continue 2
         }
 
-        echo "$file"
+        echo "${file%%/*}"
     }
 }
