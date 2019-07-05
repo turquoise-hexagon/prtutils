@@ -4,19 +4,18 @@
 
 for pkg in *; {
     [[ -d $pkg ]] && {
-        . "$pkg/Pkgfile" || {
+        . "$pkg/Pkgfile" 2> /dev/null || {
             echo "${0##*/} : can't source the Pkgfile for '$pkg'" >&2
             exit 1
         }
 
         # compare versions
-        cur=$version-$release
-        var=$(prt-get printf '%v-%r' --filter="$name")
+        var=$version-$release
+        cur=$(prt-get printf '%v-%r' --filter="$name")
 
         git add "$pkg"
 
-        [[ ! $cur ]]                  &&
-            git commit -m "add $name" ||
-            git commit -m "$name : $cur -> $var"
+        [[ $cur           ]] || { git commit -m "add $name"           ; break; }
+        [[ $cur != "$var" ]] && { git commit -m "$name : $cur -> $var"; break; }
     }
 }
