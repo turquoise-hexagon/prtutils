@@ -11,11 +11,12 @@ for pkg in *; {
 
         # compare versions
         cur=$version-$release
-        var=$(prt-get printf %v-%r --filter="$name")
+        var=$(prt-get printf '%v-%r' --filter="$name")
 
-        [[ $cur != "$var" ]] && {
-            git add "$pkg"
+        git add "$pkg"
+
+        [[ ! $cur ]]                  &&
+            git commit -m "add $name" ||
             git commit -m "$name : $cur -> $var"
-        }
     }
 }
