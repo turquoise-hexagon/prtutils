@@ -8,13 +8,11 @@ while read -r pkg; do
             [[ $line =~ ^Path ]] && {
                 IFS=: read -r _ path <<< $line
 
-                path=${path// }/$pkg
-
                 break
             }
         done < <(prt-get info "$pkg" 2> /dev/null)
 
-        [[ -d $path ]] || echo "$pkg"
+        [[ -d ${path// }/$pkg ]] || echo "$pkg"
     } &
 done < <(prt-get listinst)
 
