@@ -19,7 +19,7 @@ while read -r line; do
             file=${file% ->*}
             file=${file% (*)}
 
-            ((c += `stat --printf='%s' "/$file"`))
+            ((size += `stat --printf='%s' "/$file"`))
         done < "${path// }/$1/.footprint"
 
         break
@@ -31,4 +31,4 @@ for ((; c > 1024; c /= 1024)) {
     ((i++))
 }
 
-echo "$c${units[i]}"
+echo "$size${units[i]}"
