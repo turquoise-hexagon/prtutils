@@ -31,4 +31,4 @@ for ((; c > 1024; c /= 1024)) {
     ((i++))
 }
 
-echo "$size${units[i]}"
+echo "${size:-0}${units[i]}"
