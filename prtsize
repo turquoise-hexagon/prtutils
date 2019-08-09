@@ -27,7 +27,7 @@ while read -r line; do
 done < <(prt-get info "$1" 2> /dev/null)
 
 # make size human readable
-for ((; c > 1024; c /= 1024)) {
+for ((; size > 1024; size /= 1024)) {
     ((i++))
 }
 
