@@ -27,8 +27,6 @@ while read -r line; do
 done < <(prt-get info "$1" 2> /dev/null)
 
 # make size human readable
-for ((; size > 1024; size /= 1024)) {
-    ((i++))
-}
+for ((; size > 1024; size /= 1024, i++)) { :; }
 
 echo "${size:-0}${units[i]}"
