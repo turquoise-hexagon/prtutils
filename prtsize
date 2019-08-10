@@ -18,8 +18,9 @@ while IFS=: read -r var val; do
             # handle .footprint properly
             file=${file% ->*}
             file=${file% (*)}
+            temp=$(stat -c '%s' "/$file" 2> /dev/null)
 
-            ((size += `stat -c '%s' "/$file" 2> /dev/null`))
+            ((size += ${temp:-0}))
         done < "$path/$1/.footprint"
 
         break
