@@ -19,7 +19,7 @@ while read -r line; do
             file=${file% ->*}
             file=${file% (*)}
 
-            ((size += `stat --printf='%s' "/$file"`))
+            ((size += `stat -c '%s' "/$file" 2> /dev/null`))
         done < "${path// }/$1/.footprint"
 
         break
@@ -27,6 +27,8 @@ while read -r line; do
 done <<< $infos
 
 # make size human readable
-for ((; size > 1024; size /= 1024, i++)) { :; }
+for ((b = size; b > 1024; b /= 1024, i++)) {
+    d=.$((b % 1024 * 10 / 1024))
+}
 
-echo "$size${units[i]}"
+echo "$b$d${units[i]}"
