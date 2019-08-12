@@ -2,32 +2,34 @@
 #
 # print package size
 
-(($#)) && infos=$(prt-get info "$1" 2> /dev/null) || {
+path=$(prt-get printf '%p' --filter="$1")
+
+(($#)) && [[ $path ]] || {
     echo "usage : ${0##*/} [package]" >&2
     exit 1
 }
 
-units=(B K M G T)
-
 # get package size
-while IFS=: read -r var val; do
-    [[ $var =~ ^Path ]] && {
-        path=${val// }
+while read -r cur; do
+    ((size += cur))
+done < <(
+    IFS=$'\n'
+    stat -c '%s' $(
+        while IFS=$'\t' read -r perms _ file; do
+            [[ $perms =~ ^d ]] || {
+                # handle .footprint properly
+                file=${file% ->*}
+                file=/${file% (*)}
 
-        while read -r _ _ file; do
-            # handle .footprint properly
-            file=${file% ->*}
-            file=/${file% (*)}
-
-            [[ -f $file ]] &&
-                ((size += `stat -c '%s' "$file"`)) 2> /dev/null
+                echo "$file"
+            }
         done < "$path/$1/.footprint"
-
-        break
-    }
-done <<< $infos
+    ) 2> /dev/null
+)
 
 # make size human readable
+units=(B K M G T)
+
 for ((b = size; b > 1024; b /= 1024, i++)) {
     d=.$((b % 1024 * 10 / 1024))
 }
