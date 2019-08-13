@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+#
+# check packages for updates
+
+declare -A version noversion
+
+display() {
+    local -n var=$2
+
+    echo "$1"
+
+    for pkg in "${!var[@]}"; {
+        echo "$pkg ${var[$pkg]}"
+    }
+}
+
+for pkg in *; {
+    [[ -d $pkg ]] && {
+        cpt=
+        cur=$(prt-get printf '%v' --filter="$pkg")
+
+        while read -r line; do
+            [[ $line =~ text ]] && ((++cpt == 5)) && {
+                # parse svg
+                line=${line#*>}
+                line=${line%<*}
+                var=${line##*, }
+
+                break
+            }
+        done < <(curl -s "https://repology.org/badge/latest-versions/$pkg.svg")
+
+        case $var in
+            -) noversion[$pkg]="[$cur -> $var]";;
+            $cur) ;;
+            *)   version[$pkg]="[$cur -> $var]";;
+        esac
+    }
+}
+
+display "has a different version :" version
+echo
+display "has no existing version :" noversion
