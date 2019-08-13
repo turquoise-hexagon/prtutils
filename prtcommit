@@ -15,10 +15,8 @@ for pkg in *; {
 
         git add "$pkg"
 
-        if [[ ! $cur ]]; then
-            git commit -m "add $name"
-        elif [[ $cur != "$var" ]]; then
-            git commit -m "$name : $cur -> $var"
-        fi
+        # commit with the relevant message
+        if   [[ ! $cur           ]]; then git commit -m "add $name"
+        elif [[   $cur != "$var" ]]; then git commit -m "$name : $cur -> $var"; fi
     }
 }

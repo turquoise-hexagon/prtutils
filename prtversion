@@ -2,17 +2,17 @@
 #
 # check packages for updates
 
-declare -A version noversion
-
 display() {
     local -n var=$2
 
     echo "$1"
 
     for pkg in "${!var[@]}"; {
-        echo "$pkg ${var[$pkg]}"
+        echo "$pkg : ${var[$pkg]}"
     }
 }
+
+declare -A a b
 
 for pkg in *; {
     [[ -d $pkg ]] && {
@@ -30,14 +30,12 @@ for pkg in *; {
             }
         done < <(curl -s "https://repology.org/badge/latest-versions/$pkg.svg")
 
-        case $var in
-            -) noversion[$pkg]="[$cur -> $var]";;
-            $cur) ;;
-            *)   version[$pkg]="[$cur -> $var]";;
-        esac
+        # compare versions
+        if   [[ $var ==      - ]]; then b[$pkg]="$cur -> $var"
+        elif [[ $var != "$cur" ]]; then a[$pkg]="$cur -> $var"; fi
     }
 }
 
-display "has a different version :" version
+display "has a different version :" a
 echo
-display "has no existing version :" noversion
+display "has no existing version :" b
