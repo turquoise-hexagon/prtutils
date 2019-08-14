@@ -3,9 +3,7 @@
 # check packages for updates
 
 display() {
-    local -n var=$2
-
-    echo "$1"
+    local -n var=$1
 
     for pkg in "${!var[@]}"; {
         echo "$pkg : ${var[$pkg]}"
@@ -16,8 +14,12 @@ declare -A a b
 
 for pkg in *; {
     [[ -d $pkg ]] && {
-        cpt=
-        cur=$(prt-get printf '%v' --filter="$pkg")
+        ((cpt = 0))
+
+        . "$pkg/Pkgfile" 2> /dev/null || {
+            echo "${0##*/} : can't source the Pkgfile for '$pkg'" >&2
+            exit 1
+        }
 
         while read -r line; do
             [[ $line =~ text ]] && ((++cpt == 5)) && {
@@ -30,12 +32,14 @@ for pkg in *; {
             }
         done < <(curl -s "https://repology.org/badge/latest-versions/$pkg.svg")
 
-        # compare versions
-        if   [[ $var ==      - ]]; then b[$pkg]="$cur -> $var"
-        elif [[ $var != "$cur" ]]; then a[$pkg]="$cur -> $var"; fi
+        case $var in
+            -) b[$pkg]="$version -> $var";;
+            $version) ;;
+            *) a[$pkg]="$version -> $var";;
+        esac
     }
 }
 
-display "has a different version :" a
+display a
 echo
-display "has no existing version :" b
+display b
