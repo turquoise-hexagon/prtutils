@@ -13,7 +13,7 @@ while read -r cur; do
 done < <(
     cd /; IFS=$'\n'
 
-    stat -c '%s' $(
+    stat -c '%s' -- $(
         while read -r file; do
             [[ -d $file ]] || echo "$file"
         done < <(pkginfo -l "$1")

@@ -2,20 +2,21 @@
 #
 # create package from installed files
 
-read -r version release < <(
+read -r ver rel < <(
     prt-get printf '%v %r' --filter="$1"
 )
 
-[[ $version && $release ]] || {
+[[ $ver && $rel ]] || {
     echo "usage : ${0##*/} [package]" >&2
     exit 1
 }
 
 pwd=$PWD
 
+# cd /; IFS=$'\n'
 cd /; IFS=$'\n'
 
-tar czvf "$pwd/$1#$version-$release.pkg.tar.gz" $(
+tar czvf "$pwd/$1#$ver-$rel.pkg.tar.gz" -- $(
     while read -r file; do
         [[ -d $file ]] || echo "$file"
     done < <(pkginfo -l "$1")
