@@ -2,11 +2,11 @@
 #
 # create package from installed files
 
-read -r version release <<< $(
+read -r version release < <(
     prt-get printf '%v %r' --filter="$1"
 )
 
-[[ $version ]] || {
+[[ $version && $release ]] || {
     echo "usage : ${0##*/} [package]" >&2
     exit 1
 }
