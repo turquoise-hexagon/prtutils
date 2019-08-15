@@ -13,7 +13,7 @@ read -r version release <<< $(
 
 pwd=$PWD
 
-cd /
+cd /; IFS=$'\n'
 
 tar czvf "$pwd/$1#$version-$release.pkg.tar.gz" $(
     while read -r line; do
