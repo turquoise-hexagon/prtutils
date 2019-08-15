@@ -2,9 +2,7 @@
 #
 # print package size
 
-path=$(prt-get printf '%p' --filter="$1")
-
-(($#)) && [[ $path ]] || {
+prt-get isinst "$1" > /dev/null || {
     echo "usage : ${0##*/} [package]" >&2
     exit 1
 }
@@ -13,17 +11,12 @@ path=$(prt-get printf '%p' --filter="$1")
 while read -r cur; do
     ((size += cur))
 done < <(
-    IFS=$'\n'
-    stat -c '%s' $(
-        while IFS=$'\t' read -r perms _ file; do
-            [[ $perms =~ ^d ]] || {
-                # handle .footprint properly
-                file=${file% ->*}
-                file=/${file% (*)}
+    cd /; IFS=$'\n'
 
-                echo "$file"
-            }
-        done < "$path/$1/.footprint"
+    stat -c '%s' $(
+        while read -r file; do
+            [[ -d $file ]] || echo "$file"
+        done < <(pkginfo -l "$1")
     ) 2> /dev/null
 )
 
