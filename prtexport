@@ -13,7 +13,6 @@ read -r ver rel < <(
 
 pwd=$PWD
 
-# cd /; IFS=$'\n'
 cd /; IFS=$'\n'
 
 tar czvf "$pwd/$1#$ver-$rel.pkg.tar.gz" -- $(
