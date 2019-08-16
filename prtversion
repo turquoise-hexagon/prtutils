@@ -21,11 +21,10 @@ for pkg in *; {
             exit 1
         }
 
-        while read -r line; do
-            [[ $line =~ text ]] && ((++cpt == 5)) && {
+        while read -rd \< line; do
+            [[ $line =~ text ]] && ((++cpt == 7)) && {
                 # parse svg
                 line=${line#*>}
-                line=${line%<*}
                 var=${line##*, }
 
                 break
