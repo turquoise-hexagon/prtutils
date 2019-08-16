@@ -3,7 +3,7 @@
 # check packages for updates
 
 display() {
-    local -n var=$1
+    declare -n var=$1
 
     for pkg in "${!var[@]}"; {
         echo "$pkg : ${var[$pkg]}"
