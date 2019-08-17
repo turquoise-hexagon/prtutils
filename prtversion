@@ -1,44 +1,49 @@
 #!/usr/bin/env bash
-#
-# check packages for updates
 
 display() {
-    declare -n var=$1
+    declare -n tmp=$1
 
-    for pkg in "${!var[@]}"; {
-        echo "$pkg : ${var[$pkg]}"
+    for pkg in "${!tmp[@]}"; {
+        echo "$pkg : ${tmp[$pkg]}"
     }
 }
 
-declare -A a b
+declare -A n_version y_version
 
+# build a list of packages
 for pkg in *; {
-    [[ -d $pkg ]] && {
-        ((cpt = 0))
+    [[ -d $pkg ]] && tmp[i++]=$pkg
+}
+
+((
+    c = 4,
+    i = 0
+))
+
+while read -rd \< line; do
+    # parse svgs from repology to compare versions
+    [[ $line =~ text ]] && ((c++ % 8 == 0)) && {
+        var=${line#*>}
+        var=${var##*, }
+        pkg=${tmp[i++]}
 
         . "$pkg/Pkgfile" 2> /dev/null || {
             echo "${0##*/} : can't source the Pkgfile for '$pkg'" >&2
-            exit 1
         }
-
-        while read -rd \< line; do
-            [[ $line =~ text ]] && ((++cpt == 7)) && {
-                # parse svg
-                line=${line#*>}
-                var=${line##*, }
-
-                break
-            }
-        done < <(curl -s "https://repology.org/badge/latest-versions/$pkg.svg")
-
+        
         case $var in
-            -) b[$pkg]="$version -> $var";;
-            $version) ;;
-            *) a[$pkg]="$version -> $var";;
+            -) n_version[$pkg]="$version -> $var";;
+            $version) ;; # do nothing
+            *) y_version[$pkg]="$version -> $var";;
         esac
     }
-}
+done < <(
+    curl -s $(
+        # build a list of urls
+        for pkg in "${tmp[@]}"; {
+            [[ -d $pkg ]] && echo "https://repology.org/badge/latest-versions/$pkg.svg"
+        }))
 
-display a
+display y_version
 echo
-display b
+display n_version
