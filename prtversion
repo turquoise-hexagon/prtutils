@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+#
+# check packages for updates
 
 display() {
     declare -n tmp=$1
@@ -8,17 +10,15 @@ display() {
     }
 }
 
-declare -A n_version y_version
+declare -A y_version n_version
 
 # build a list of packages
 for pkg in *; {
     [[ -d $pkg ]] && tmp[i++]=$pkg
 }
 
-((
-    c = 4,
-    i = 0
-))
+c=4
+i=0
 
 while read -rd \< line; do
     # parse svgs from repology to compare versions
@@ -29,8 +29,9 @@ while read -rd \< line; do
 
         . "$pkg/Pkgfile" 2> /dev/null || {
             echo "${0##*/} : can't source the Pkgfile for '$pkg'" >&2
+            exit 1
         }
-        
+       
         case $var in
             -) n_version[$pkg]="$version -> $var";;
             $version) ;; # do nothing
@@ -45,5 +46,4 @@ done < <(
         }))
 
 display y_version
-echo
 display n_version
