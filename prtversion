@@ -30,5 +30,4 @@ done < <(
         printf 'https://repology.org/badge/latest-versions/%s.svg ' "${tmp[@]}"
     ))
 
-printf '%s\n' "${y_ver[@]}"
-printf '%s\n' "${n_ver[@]}"
+printf '%s\n%s\n' "${y_ver[@]}" "${n_ver[@]}"
