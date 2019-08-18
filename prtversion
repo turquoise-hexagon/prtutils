@@ -7,11 +7,11 @@ for pkg in */; {
     tmp+=("${pkg%?}")
 }
 
-while read -r line; do
+while read -r a; do
     # parse svgs to compare versions
-    [[ $line =~ middle\"\>.*middle\"\>([^ ,]*).*\<\/text ]]
-
-    var=${BASH_REMATCH[1]}
+    var=${a##*middle\">}
+    var=${var%%</text*}
+    var=${var##*, }
     pkg=${tmp[i++]}
 
     . "$pkg/Pkgfile" 2> /dev/null || {
