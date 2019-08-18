@@ -2,44 +2,31 @@
 #
 # check packages for updates
 
-display() {
-    declare -n tmp=$1
-
-    for pkg in "${!tmp[@]}"; {
-        echo "$pkg : ${tmp[$pkg]}"
-    }
-}
-
-declare -A y_version n_version
-
 # build a list of packages
 for pkg in */; {
     tmp+=("${pkg%?}")
 }
 
-while read -rd \< line; do
-    # parse svgs from repology to compare versions
-    [[ $line =~ opacity.*\>([^latest]+) ]] && {
-        var=${BASH_REMATCH[1]}
-        var=${var##*, }
-        pkg=${tmp[i++]}
+while read -r line; do
+    var=${line##*middle\">}
+    var=${var%%</text*}
+    var=${var##*, }
+    pkg=${tmp[i++]}
 
-        . "$pkg/Pkgfile" 2> /dev/null || {
-            echo "${0##*/} : can't source the Pkgfile for '$pkg'" >&2
-            exit 1
-        }
-       
-        case $var in
-            -) n_version[$pkg]="$version -> $var";;
-            $version) ;; # do nothing
-            *) y_version[$pkg]="$version -> $var"
-        esac
+    . "$pkg/Pkgfile" 2> /dev/null || {
+        echo "${0##*/} : can't source the Pkgfile for '$pkg'" >&2
+        exit 1
     }
+
+    case $var in
+        -) n_ver+=("$pkg : $version -> $var");;
+        $version) ;; # do nothing
+        *) y_ver+=("$pkg : $version -> $var")
+    esac
 done < <(
-    curl -s $(
-        # build a list of urls
-        printf 'https://repology.org/badge/latest-versions/%s.svg\n' "${tmp[@]}"
+    curl -w '\n' -s $(
+        printf 'https://repology.org/badge/latest-versions/%s.svg ' "${tmp[@]}"
     ))
 
-display y_version
-display n_version
+printf '%s\n' "${y_ver[@]}"
+printf '%s\n' "${n_ver[@]}"
