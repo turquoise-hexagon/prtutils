@@ -13,8 +13,8 @@ display() {
 declare -A y_version n_version
 
 # build a list of packages
-for pkg in *; {
-    [[ -d $pkg ]] && tmp[i++]=$pkg
+for pkg in */; {
+    tmp[i++]=${pkg%?}
 }
 
 c=4
@@ -22,7 +22,7 @@ i=0
 
 while read -rd \< line; do
     # parse svgs from repology to compare versions
-    [[ $line =~ text ]] && ((c++ % 8 == 0)) && {
+    [[ $line =~ text ]] && ! ((c++ % 8)) && {
         var=${line#*>}
         var=${var##*, }
         pkg=${tmp[i++]}
@@ -35,15 +35,14 @@ while read -rd \< line; do
         case $var in
             -) n_version[$pkg]="$version -> $var";;
             $version) ;; # do nothing
-            *) y_version[$pkg]="$version -> $var";;
+            *) y_version[$pkg]="$version -> $var"
         esac
     }
 done < <(
     curl -s $(
         # build a list of urls
-        for pkg in "${tmp[@]}"; {
-            [[ -d $pkg ]] && echo "https://repology.org/badge/latest-versions/$pkg.svg"
-        }))
+        printf 'https://repology.org/badge/latest-versions/%s.svg\n' "${tmp[@]}"
+    ))
 
 display y_version
 display n_version

@@ -19,7 +19,7 @@ for pkg in *; {
         case $cur in
             '') git commit -m "add $name";;
             $var) ;; # do nothing
-            *)  git commit -m "$name : $cur -> $var";;
+            *)  git commit -m "$name : $cur -> $var"
         esac
     }
 }
