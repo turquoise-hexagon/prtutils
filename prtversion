@@ -9,9 +9,8 @@ for pkg in */; {
 
 while read -r a; do
     # parse svgs to compare versions
-    var=${a##*middle\">}
-    var=${var%%</text*}
-    var=${var##*, }
+    [[ ${a%</text*} =~ ([^> ]+)$ ]]
+    var=${BASH_REMATCH[1]}
     pkg=${tmp[i++]}
 
     . "$pkg/Pkgfile" 2> /dev/null || {
