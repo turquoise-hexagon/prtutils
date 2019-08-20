@@ -2,6 +2,14 @@
 #
 # check packages for updates
 
+display() {
+    declare -n tmp=$1
+
+    for pkg in "${tmp[@]}"; {
+        echo "$pkg"
+    }
+}
+
 # build list of packages
 for pkg in */; {
     tmp+=("${pkg%?}")
@@ -29,4 +37,5 @@ done < <(
         printf 'https://repology.org/badge/latest-versions/%s.svg ' "${tmp[@]}"
     ))
 
-printf '%s\n%s\n' "${y_ver[@]}" "${n_ver[@]}"
+display y_ver
+display n_ver
