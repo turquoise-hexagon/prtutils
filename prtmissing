@@ -3,17 +3,7 @@
 # list ports that are missing from the repos
 
 while read -r pkg; do
-    {
-        while IFS=: read -r var val; do
-            [[ $var =~ ^Path ]] && {
-                path=${val// }
-
-                break
-            }
-        done < <(prt-get info "$pkg" 2> /dev/null)
-
-        [[ -d $path/$pkg ]] || echo "$pkg"
-    } &
+    prt-get info "$pkg" &> /dev/null || echo "$pkg" &
 done < <(prt-get listinst)
 
 wait
