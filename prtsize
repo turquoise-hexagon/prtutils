@@ -11,11 +11,11 @@ prt-get isinst "$1" > /dev/null || {
 while read -r cur; do
     ((size += cur))
 done < <(
-    cd /; IFS=$'\n'
+    IFS=$'\n'
 
     stat -c '%s' -- $(
         while read -r file; do
-            [[ -d $file ]] || echo "$file"
+            [[ $file =~ /$ ]] || echo "/$file"
         done < <(pkginfo -l "$1")
     ) 2> /dev/null
 )

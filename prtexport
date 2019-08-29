@@ -11,10 +11,10 @@ read -r ver rel < <(
     exit 1
 }
 
-cd /; IFS=$'\n'
+IFS=$'\n'
 
-tar czvf "$OLDPWD/$1#$ver-$rel.pkg.tar.gz" -- $(
+tar czvf "$1#$ver-$rel.pkg.tar.gz" -C / -- $(
     while read -r file; do
-        [[ -d $file ]] || echo "$file"
+        [[ $file =~ /$ ]] || echo "$file"
     done < <(pkginfo -l "$1")
 )
