@@ -2,11 +2,11 @@
 #
 # create package from installed files
 
-read -r ver rel < <(
-    prt-get printf '%v %r' --filter="$1"
+read -r ver rel ins < <(
+    prt-get printf '%v %r %i' --filter=$1
 )
 
-[[ $ver && $rel ]] || {
+[[ $ins =~ yes|diff ]] || {
     echo "usage : ${0##*/} [package]" >&2
     exit 1
 }
