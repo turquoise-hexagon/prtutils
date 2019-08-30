@@ -2,24 +2,19 @@
 #
 # format ports commits
 
-for pkg in */; {
-    pkg=${pkg%?}
+for dir in */; {
+    . "${dir}Pkgfile" 2> /dev/null && {
+        # compare versions
+        var=$version-$release
+        cur=$(prt-get printf '%v-%r' --filter="$name")
 
-    . "$pkg/Pkgfile" 2> /dev/null || {
-        echo "${0##*/} : can't source the Pkgfile for '$pkg'" >&2
-        exit 1
+        git add "$dir"
+
+        # commit with the relevant message
+        case $cur in
+           '') git commit -m "add $name";;
+            $var) ;; # do nothing
+            *) git commit -m "$name : $cur -> $var"
+        esac
     }
-
-    # compare versions
-    var=$version-$release
-    cur=$(prt-get printf '%v-%r' --filter="$name")
-
-    git add "$pkg"
-
-    # commit with the relevant message
-    case $cur in
-       '') git commit -m "add $name";;
-        $var) ;; # do nothing
-        *) git commit -m "$name : $cur -> $var"
-    esac
 }
