@@ -12,7 +12,7 @@ display() {
 
 # build a list of packages
 for dir in */; {
-    . "$dir/Pkgfile" 2> /dev/null && {
+    . "${dir}Pkgfile" 2> /dev/null && {
         tmp_pkg+=("$name")
         tmp_ver+=("$version")
     }
