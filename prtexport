@@ -2,18 +2,14 @@
 #
 # create package from installed files
 
-read -r ver rel ins < <(
-    prt-get printf '%v %r %i' --filter=$1
-)
-
-[[ $ins =~ yes|diff ]] || {
+version=$(prt-get current "$1") 2> /dev/null || {
     echo "usage : ${0##*/} [package]" >&2
     exit 1
 }
 
 IFS=$'\n'
 
-tar czvf "$1#$ver-$rel.pkg.tar.gz" -C / -- $(
+tar czvf "$1#$version.pkg.tar.gz" -C / -- $(
     while read -r file; do
         [[ $file =~ /$ ]] || echo "$file"
     done < <(pkginfo -l "$1")

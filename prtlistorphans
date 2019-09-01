@@ -3,11 +3,11 @@
 # list packages that could be removed
 
 while read -r pkg; do
-    [[ $(prt-get info "$pkg") =~ Path:\ *([^$'\n']*) ]] && {
-        var=${BASH_REMATCH[1]}
+    {
+        path=$(prt-get path "$pkg")
 
         for repo; {
-            [[ $var =~ $repo$ ]] && break 2
+            [[ $path =~ $repo/$pkg$ ]] && break 2
         } || echo "$pkg"
     } &
 done < <(prt-get listorphans)

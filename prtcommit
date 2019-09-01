@@ -6,7 +6,7 @@ for dir in */; {
     . "${dir}Pkgfile" 2> /dev/null && {
         # compare versions
         var=$version-$release
-        cur=$(prt-get printf '%v-%r' --filter="$name")
+        cur=$(prt-get current "$name")
 
         git add "$dir"
 
