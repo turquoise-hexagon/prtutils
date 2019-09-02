@@ -2,12 +2,10 @@
 #
 # list packages that would be orphaned
 
-(($#)) || {
+dependencies=$(prt-get quickdep "$1" 2> /dev/null) || {
     echo "usage : ${0##*/} [package]" >&2
     exit 1
 }
-
-dependencies=$(prt-get quickdep "$1")
 
 for dependency in $dependencies; {
     # check if all dependents are dependencies
