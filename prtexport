@@ -2,7 +2,7 @@
 #
 # create package from installed files
 
-version=$(prt-get current "$1") 2> /dev/null || {
+version=$(prt-get current "$1") || {
     echo "usage : ${0##*/} [package]" >&2
     exit 1
 }
