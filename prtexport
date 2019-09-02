@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 #
 # create package from installed files
 
@@ -7,10 +7,16 @@ version=$(prt-get current "$1") || {
     exit 1
 }
 
-IFS=$'\n'
+IFS='
+'
 
 tar czvf "$1#$version.pkg.tar.gz" -C / -- $(
-    while read -r file; do
-        [[ $file =~ /$ ]] || echo "$file"
-    done < <(pkginfo -l "$1")
+    pkginfo -l "$1" |
+        while read -r file; do
+            case $file in
+                */) continue
+            esac
+
+            echo "$file"
+        done
 )
