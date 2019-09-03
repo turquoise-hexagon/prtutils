@@ -24,6 +24,7 @@ done < <(
 depends=$(prt-get quickdep "$1")
 
 for pkg in "${!array[@]}"; {
+    # https://crux.nu/Main/PortGuidelines#ntoc2
     for dep in $depends glibc gcc; {
         [[ $pkg == "$dep" ]] && continue 2
     }
