@@ -8,7 +8,7 @@ list=$(pkginfo -l "$1" 2> /dev/null) || {
 }
 
 while read -r line; do
-    [[ $line =~ (.*)\ \=\>\ (.*)\  ]] &&
+    [[ $line =~ (.*)' => '(.*)\  ]] &&
         [[ ${BASH_REMATCH[2]} == not ]] &&
             echo "${BASH_REMATCH[1]}"
 done < <(
