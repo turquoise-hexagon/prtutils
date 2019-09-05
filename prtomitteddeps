@@ -7,14 +7,30 @@ list=$(pkginfo -l "$1" 2> /dev/null) || {
     exit 1
 }
 
-declare -A array
+declare -A files packages
+
+# build a database
+while read -r line; do
+    [[ $line ]] || {
+        tmp=0
+        continue
+    }
+
+    ((tmp)) || {
+        tmp=1
+        pkg=$line
+        continue
+    }
+
+    files[/$line]=$pkg
+done < /var/lib/pkg/db
 
 while read -r line; do
-        [[                                                             \
-            $line =~ '=> '(.*)\  &&                                    \
-            $(prt-get fsearch --full "${BASH_REMATCH[1]}") =~ ([^/]+): \
-        ]] &&
-            array[${BASH_REMATCH[1]}]=1
+    [[                               \
+        $line =~ '=> '(.*)\       && \
+        ${files[${BASH_REMATCH[1]}]} \
+    ]] &&
+        packages[${files[${BASH_REMATCH[1]}]}]=1
 done < <(
     cd /; IFS=$'\n'
 
@@ -23,7 +39,7 @@ done < <(
 
 depends=$(prt-get quickdep "$1")
 
-for pkg in "${!array[@]}"; {
+for pkg in "${!packages[@]}"; {
     # https://crux.nu/Main/PortGuidelines#ntoc2
     for dep in $depends glibc gcc; {
         [[ $pkg == "$dep" ]] && continue 2
