@@ -7,7 +7,7 @@ while read -r pkg; do
         path=$(prt-get path "$pkg")
 
         for repo; {
-            [[ $path =~ $repo/$pkg$ ]] && break 2
+            [[ $path =~ $repo/$pkg$ ]] && break
         } || echo "$pkg"
     } &
 done < <(prt-get listorphans)
