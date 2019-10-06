@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+#
+# list dependencies to install
+
+deps=$(prt-get quickdep "$1" 2> /dev/null) || {
+    echo "usage : ${0##*/} [package]" >&2
+    exit 1
+}
+
+declare -A installed aliases
+
+# store aliases
+while IFS=': ' read -r alias orig; do
+    aliases[$alias]=$orig
+done < /var/lib/pkg/prt-get.aliases
+
+# store installed packages
+while read -r pkg; do
+    [[ ${aliases[$pkg]} ]] &&
+        installed[${aliases[$pkg]}]=1
+
+    installed[$pkg]=1
+done < <(prt-get listinst)
+
+for dep in $deps; do
+    [[ ${installed[$dep]} ]] || echo "$dep"
+done
