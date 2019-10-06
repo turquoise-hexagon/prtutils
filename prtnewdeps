@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+#
+# list dependencies that would have to be installed
 
 list=$(prt-get depends "$1" 2> /dev/null) || {
     echo "usage : ${0##*/} [package]" >&2
