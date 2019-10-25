@@ -10,6 +10,11 @@ display() {
     }
 }
 
+(($#)) || {
+    echo "usage : ${0##*/} [repo]" >&2
+    exit 1
+}
+
 # build a list of packages
 while read -r pkg ver path; do
     for repo; {
