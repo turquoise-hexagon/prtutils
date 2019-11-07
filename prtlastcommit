@@ -1,0 +1,38 @@
+#!/bin/bash
+#
+# set port to last git commit
+
+die() {
+    echo "$1" >&2
+    exit 1
+}
+
+# get package informations
+. Pkgfile 2> /dev/null ||
+    die 'error : failed to source Pkgfile'
+
+[[ $commit && $source =~ github.*archive ]] ||
+    die 'error : wrong package format'
+
+# get repo informations
+trap 'rm -rf "$name"' EXIT
+
+git clone "${source%archive*}" --depth=1 "$name" 2> /dev/null ||
+    die 'error : failed to clone source'
+
+read -r sha time _ _ < <(
+    git --git-dir="$name/.git" log --format='%H %ci'
+)
+
+# update pkgfile
+printf '%s\n' "$(
+    while IFS= read -r line; do
+        [[ $line =~ ^commit ]] &&
+            line=commit=$sha
+
+        [[ $line =~ ^version ]] &&
+            line=version=${time//-}
+
+        printf '%s\n' "$line"
+    done < Pkgfile
+)" > Pkgfile
