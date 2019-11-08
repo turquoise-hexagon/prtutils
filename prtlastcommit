@@ -32,13 +32,14 @@ read -r sha time _ _ < <(
 )
 
 # update pkgfile
+time=${time//-}
+
 printf '%s\n' "$(
     while IFS= read -r line; do
-        [[ $line =~ ^commit ]] &&
-            line=commit=$sha
-
-        [[ $line =~ ^version ]] &&
-            line=version=${time//-}
+        case $line in
+            commit*)  line=commit=$sha;;
+            version*) line=version=$time
+        esac
 
         printf '%s\n' "$line"
     done < Pkgfile
