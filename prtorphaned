@@ -2,14 +2,21 @@
 #
 # list packages that could be removed
 
+declare -A aliases
+
+while IFS=': ' read -r alias orig; do
+    aliases[$alias]=$orig
+done < /var/lib/pkg/prt-get.aliases
+
 while read -r pkg; do
-    {
-        path=$(prt-get path "$pkg")
+    [[                                          \
+        ${aliases[$pkg]}                     && \
+        $(prt-get dependent "${aliases[$pkg]}") \
+    ]] && continue
 
-        for repo; {
-            [[ $path =~ $repo/$pkg$ ]] && break
-        } || echo "$pkg"
-    } &
+    path=$(prt-get path "$pkg")
+
+    for repo; {
+        [[ $path =~ $repo/$pkg$ ]] && break
+    } || echo "$pkg"
 done < <(prt-get listorphans)
-
-wait
