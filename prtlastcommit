@@ -31,6 +31,9 @@ read -r sha time _ _ < <(
         log --format='%H %ci'
 )
 
+[[ $sha == "$commit" ]] &&
+    die 'error : already up to date'
+
 # update pkgfile
 time=${time//-}
 
