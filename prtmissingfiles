@@ -1,4 +1,6 @@
-#!/usr/bin/env bash
+#!/bin/bash
+#
+# find missing files
 
 list=$(pkginfo -l "$1" 2> /dev/null) || {
     echo "usage : ${0##*/} [package]" >&2
