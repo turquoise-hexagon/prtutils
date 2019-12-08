@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+list=$(pkginfo -l "$1" 2> /dev/null) || {
+    echo "usage : ${0##*/} [package]" >&2
+    exit 1
+}
+
+while read -r file; do
+    [[ -e /$file ]] || echo "/$file"
+done <<< $list
