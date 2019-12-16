@@ -3,5 +3,5 @@
 # update port
 
 for opt in do us d uf us; do
-    fakeroot pkgmk -"$opt" || break
+    fakeroot pkgmk -"$opt"
 done
