@@ -11,10 +11,7 @@ die() {
 . Pkgfile 2> /dev/null ||
     die 'error : failed to source Pkgfile'
 
-[[                             \
-    $commit &&                 \
-    $source =~ github.*archive \
-]] ||
+[[ $commit ]] ||
     die 'error : wrong package format'
 
 # get repo informations
