@@ -17,10 +17,11 @@ die() {
 # get repo informations
 trap 'rm -rf "$name"' EXIT
 
-git                            \
-    clone "${source%archive*}" \
-    --depth=1 "$name" 2> /dev/null ||
-    die 'error : failed to clone source'
+[[ $source =~ (http.*$name/) ]] &&
+    git                            \
+        clone "${BASH_REMATCH[1]}" \
+        --depth=1 "$name" 2> /dev/null ||
+        die 'error : failed to clone source'
 
 read -r sha time _ _ < <(
     git                        \
