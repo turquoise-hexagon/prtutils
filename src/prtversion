@@ -17,12 +17,13 @@ display() {
 
 # build a list of packages
 while read -r pkg ver path; do
-    for repo; {
-        [[ $path =~ /$repo$ ]] && {
-            tmp_pkg+=("$pkg")
-            tmp_ver+=("$ver")
+    [[ $ver == git ]] ||
+        for repo; {
+            [[ $path =~ /$repo$ ]] && {
+                tmp_pkg+=("$pkg")
+                tmp_ver+=("$ver")
+            }
         }
-    }
 done < <(prt-get printf '%n %v %p\n')
 
 while read -r line; do
