@@ -9,9 +9,9 @@ while IFS=': ' read -r alias orig; do
 done < /var/lib/pkg/prt-get.aliases
 
 while read -r pkg; do
-    [[                                          \
-        ${aliases[$pkg]}                     && \
-        $(prt-get dependent "${aliases[$pkg]}") \
+    [[
+        ${aliases[$pkg]} &&
+        $(prt-get dependent "${aliases[$pkg]}")
     ]] && continue
 
     path=$(prt-get path "$pkg")

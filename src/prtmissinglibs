@@ -7,14 +7,20 @@ list=$(pkginfo -l "$1" 2> /dev/null) || {
     exit 1
 }
 
+declare -A array
+
 while read -r line; do
-    [[                               \
-        $line =~ (.*)' => '(.*)\  && \
-        ${BASH_REMATCH[2]} == not    \
+    [[
+        $line =~ (.*)' => '(.*)\  &&
+        ${BASH_REMATCH[2]} == not
     ]] &&
-        echo "${BASH_REMATCH[1]}"
+        array[${BASH_REMATCH[1]}]=
 done < <(
     cd /; IFS=$'\n'
 
     ldd $list 2> /dev/null
 )
+
+for lib in "${!array[@]}"; {
+    echo "$lib"
+}
