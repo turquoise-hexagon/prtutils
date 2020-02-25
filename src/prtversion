@@ -43,7 +43,7 @@ while read -r line; do
 done < <(
     curl -w '\n' -s $(
         # build a list of urls
-        printf 'https://repology.org/badge/latest-versions/%s.svg ' "${tmp_pkg[@]}"
+        printf 'https://repology.org/badge/latest-versions/%s.svg?header= ' "${tmp_pkg[@]}"
     ))
 
 display y_ver
