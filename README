@@ -1,1 +1,29 @@
-various code snippets for ports management
+various scripts for crux ports / packages management
+
+usage :
+$ cd src
+$ ./$script
+
+depends on :
+* pkgutils
+* prt-get
+* bash
+* glibc
+
+descriptions :
+* ports management
+    prtcommit -> commit ports changes to git with a formatted message
+    prtlastcommit -> set Pkgfile to the last commit available from git{hub,lab}
+    prtupdate -> build a package and update its footprint & signature
+    prtversion -> compare local versions with versions from repology
+* packages utilities
+    prtexport -> export an installed package to a crux package
+    prtmissing -> find packages that are missing from available ports
+    prtmissingdeps -> find dependencies that are missing from the system
+    prtmissingfiles -> find files that were installed by packages but are now missing from the system
+    prtmissinglibs -> find libraries that were linked to a package but are missing from the system
+    prtnewdeps -> find dependencies that needs to be installed for a package
+    prtomitteddeps -> find dependencies that were omitted from a package description
+    prtorphaned -> find packages that can be safely removed
+    prtorphans -> find packages that can be safely removed with a package
+    prtsize -> find size of a installed package
