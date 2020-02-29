@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# list ports that are missing from the repos
+# prtmissing - find packages that are missing from available ports
 
 while read -r pkg; do
     prt-get info "$pkg" &> /dev/null || echo "$pkg" &

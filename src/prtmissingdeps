@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# list missing dependencies
+# prtmissingdeps - find dependencies that are missing from the system
 
 declare -A installed aliases
 

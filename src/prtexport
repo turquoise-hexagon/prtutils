@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# create package from installed files
+# prtexpot - export an installed package to a crux package
 
 version=$(prt-get current "$1") || {
     echo "usage : ${0##*/} [package]" >&2

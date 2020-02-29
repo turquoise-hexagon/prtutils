@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# set port to last git commit
+# prtlastcommit - set Pkgfile to the last commit available from git{hub,lab}
 
 die() {
     echo "$1" >&2

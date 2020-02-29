@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# list packages that could be removed
+# prtorphaned - find packages that can be safely removed
 
 declare -A aliases
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# find some of the dependencies missing from the list
+# prtomitteddeps - find dependencies that were omitted from a package description
 
 list=$(pkginfo -l "$1" 2> /dev/null) || {
     echo "usage : ${0##*/} [package]" >&2

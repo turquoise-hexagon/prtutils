@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# print package size
+# prtsize - find size of a installed package
 
 files=$(pkginfo -l "$1" 2> /dev/null) || {
     echo "usage : ${0##*/} [package]" >&2

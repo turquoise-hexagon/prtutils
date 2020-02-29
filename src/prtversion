@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# check packages for updates
+# prtversion - compare local versions with versions from repology
 
 display() {
     declare -n tmp=$1

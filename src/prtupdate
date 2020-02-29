@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# update port
+# prtupdate - build a package and update its footprint & signature
 
 for opt in do us d uf us; do
     fakeroot pkgmk -"$opt"

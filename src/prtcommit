@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# format ports commits
+# prtcommmit - commit ports changes to git with a formatted message
 
 for dir in */; {
     . "${dir}Pkgfile" 2> /dev/null && {

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# find missing libraries
+# prtmissinglibs - find libraries that were linked to a package but are missing from the system
 
 list=$(pkginfo -l "$1" 2> /dev/null) || {
     echo "usage : ${0##*/} [package]" >&2
