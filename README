@@ -40,7 +40,7 @@ usage
 
 depends on
 ----------
-    * pkgutils
-    * prt-get
     * bash
     * glibc
+    * pkgutils
+    * prt-get
