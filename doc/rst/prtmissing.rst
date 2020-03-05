@@ -23,6 +23,5 @@ it outputs a list of packages, one per line
 
 example
 -------
-.. line-block::
-    $ prtmissing
-    xxd
+|    $ prtmissing
+|    xxd

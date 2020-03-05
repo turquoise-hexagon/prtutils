@@ -16,19 +16,17 @@ prtversion `ports`
 
 description
 -----------
-.. line-block::
-    prtversion compares the versions from a local ports repository with the ones from repology and builds a list from it
-    it outputs a list of packages, one per line, with the following format :
+|    prtversion compares the versions from a local ports repository with the ones from repology and builds a list from it
+|    it outputs a list of packages, one per line, with the following format :
 
 package : local -> remote
 
 example
 -------
-.. line-block::
-    $ prtversion turquoise
-    boost : 1.72.0 -> 1_72_0
-    colorpicker : 20190725 -> 1.1.3
-    glslang : 20200115 -> 8.13.3559
-    id3 : 0.80 -> 1.1.0
-    lemonbar : 20190423 -> 1.3
-    ...
+|    $ prtversion turquoise
+|    boost : 1.72.0 -> 1_72_0
+|    colorpicker : 20190725 -> 1.1.3
+|    glslang : 20200115 -> 8.13.3559
+|    id3 : 0.80 -> 1.1.0
+|    lemonbar : 20190423 -> 1.3
+|    ...

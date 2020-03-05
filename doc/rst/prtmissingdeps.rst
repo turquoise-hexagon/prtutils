@@ -22,6 +22,5 @@ it outputs a list of packages, one per line
 
 example
 -------
-.. line-block::
-    $ prtmissingdeps
-    libsndfile
+|    $ prtmissingdeps
+|    libsndfile

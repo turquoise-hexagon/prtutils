@@ -22,14 +22,13 @@ it outputs a list of packages, one per line
 
 example
 -------
-.. line-block::
-    $ prtorphans mpv
-    yasm
-    ffmpeg
-    docutils
-    spirv-headers
-    spirv-tools
-    glslang
-    shaderc
-    libass
-    mpv
+|    $ prtorphans mpv
+|    yasm
+|    ffmpeg
+|    docutils
+|    spirv-headers
+|    spirv-tools
+|    glslang
+|    shaderc
+|    libass
+|    mpv

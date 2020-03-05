@@ -20,8 +20,5 @@ prtexport exports an installed package to a crux package archive using the files
 
 example
 -------
-.. line-block::
-    $ prtexport bash
-    bin/bash
-    etc/profile
-    usr/share/man/man1/bash.1.gz
+|    $ echo true
+|    true

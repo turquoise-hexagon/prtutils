@@ -22,8 +22,7 @@ it outputs a list of files, one per line
 
 example
 -------
-.. line-block::
-    $ prtmissingfiles exim
-    /var/log/exim/exim_mainlog
-    /var/log/exim/exim_paniclog
-    /var/log/exim/exim_rejectlog
+|    $ prtmissingfiles exim
+|    /var/log/exim/exim_mainlog
+|    /var/log/exim/exim_paniclog
+|    /var/log/exim/exim_rejectlog

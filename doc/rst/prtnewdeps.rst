@@ -22,7 +22,6 @@ it outputs a list of packages, one per line
 
 example
 -------
-.. line-block::
-    $ prtnewdeps transmission
-    libevent
-    transmission
+|    $ prtnewdeps transmission
+|    libevent
+|    transmission
