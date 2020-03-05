@@ -42,7 +42,7 @@ documentation
 -------------
     $ cd doc
     $ ./make.sh
-    # cp man/* /usr/share/man/man1
+    $ man man/$script.1.gz
 
 depends on
 ----------
