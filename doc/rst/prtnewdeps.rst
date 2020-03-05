@@ -22,6 +22,8 @@ it outputs a list of packages, one per line
 
 example
 -------
-|    $ prtnewdeps transmission
-|    libevent
-|    transmission
+::
+
+    $ prtnewdeps transmission
+    libevent
+    transmission

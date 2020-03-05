@@ -23,5 +23,7 @@ it outputs a list of packages, one per line
 
 example
 -------
-|    $ prtmissing
-|    xxd
+::
+
+    $ prtmissing
+    xxd

@@ -22,6 +22,8 @@ it outputs a list of packages, one per line
 
 example
 -------
-|    $ prtomitteddeps qsynth
-|    icu
-|    libsdl2
+::
+
+    $ prtomitteddeps qsynth
+    icu
+    libsdl2

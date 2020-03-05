@@ -22,18 +22,20 @@ it outputs a list of libraries, one per line
 
 example
 -------
-|    $ prtmissinglibs firefox-bin
-|    libplds4.so
-|    libssl3.so
-|    libnspr4.so
-|    libplc4.so
-|    libnssutil3.so
-|    liblgpllibs.so
-|    libmozsqlite3.so
-|    libxul.so
-|    libmozsandbox.so
-|    libmozavutil.so
-|    libsmime3.so
-|    libmozwayland.so
-|    libmozgtk.so
-|    libnss3.so
+::
+
+    $ prtmissinglibs firefox-bin
+    libplds4.so
+    libssl3.so
+    libnspr4.so
+    libplc4.so
+    libnssutil3.so
+    liblgpllibs.so
+    libmozsqlite3.so
+    libxul.so
+    libmozsandbox.so
+    libmozavutil.so
+    libsmime3.so
+    libmozwayland.so
+    libmozgtk.so
+    libnss3.so

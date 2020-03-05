@@ -22,10 +22,12 @@ it outputs a list of packages, one per line
 
 example
 -------
-|    $ prtorphaned xorg turquoise core
-|    adwaita-icon-theme
-|    alsa-utils
-|    apulse
-|    exif
-|    fakeroot
-|    ...
+::
+
+    $ prtorphaned xorg turquoise core
+    adwaita-icon-theme
+    alsa-utils
+    apulse
+    exif
+    fakeroot
+    ...

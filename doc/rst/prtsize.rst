@@ -20,5 +20,7 @@ prtsize returns the total size of the files that were installed with a package, 
 
 example
 -------
-|    $ prtsize neovim
-|    16.6M
+::
+
+    $ prtsize neovim
+    16.6M

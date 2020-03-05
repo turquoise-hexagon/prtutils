@@ -22,5 +22,7 @@ it outputs a list of packages, one per line
 
 example
 -------
-|    $ prtmissingdeps
-|    libsndfile
+::
+
+    $ prtmissingdeps
+    libsndfile
