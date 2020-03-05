@@ -35,13 +35,13 @@ prtutils
 
 usage
 -----
-    # scripts
-    $ cd src
-    $ ./$script
-    # documentation
-    $ cd doc
-    $ ./make.sh
-    $ man man/$script.1.gz
+    * scripts
+        $ cd src
+        $ ./$script
+    * documentation
+        $ cd doc
+        $ ./make.sh
+        $ man man/$script.1.gz
 
 depends on
 ----------
