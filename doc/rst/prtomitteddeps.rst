@@ -6,7 +6,7 @@ find dependencies that were omitted from a package description
 ==============================================================
 
 :date: March 2020
-:version: prtutils
+:version: 0.0
 :manual section: 1
 :manual group: General Commands Manual
 

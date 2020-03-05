@@ -6,7 +6,7 @@ build a package and update its footprint & signature
 ====================================================
 
 :date: March 2020
-:version: prtutils
+:version: 0.0
 :manual section: 1
 :manual group: General Commands Manual
 

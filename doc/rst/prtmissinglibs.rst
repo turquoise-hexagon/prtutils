@@ -6,7 +6,7 @@ find libraries that were linked to a package but are missing from the system
 ============================================================================
 
 :date: March 2020
-:version: prtutils
+:version: 0.0
 :manual section: 1
 :manual group: General Commands Manual
 

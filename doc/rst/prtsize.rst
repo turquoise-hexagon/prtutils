@@ -6,7 +6,7 @@ find size of a installed package
 ================================
 
 :date: March 2020
-:version: prtutils
+:version: 0.0
 :manual section: 1
 :manual group: General Commands Manual
 

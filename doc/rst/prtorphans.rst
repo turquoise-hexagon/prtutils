@@ -6,7 +6,7 @@ find packages that can be safely removed with a package
 =======================================================
 
 :date: March 2020
-:version: prtutils
+:version: 0.0
 :manual section: 1
 :manual group: General Commands Manual
 

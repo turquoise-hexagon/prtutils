@@ -6,7 +6,7 @@ find files that were installed by packages but are now missing from the system
 ==============================================================================
 
 :date: March 2020
-:version: prtutils
+:version: 0.0
 :manual section: 1
 :manual group: General Commands Manual
 
