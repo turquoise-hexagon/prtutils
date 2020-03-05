@@ -16,12 +16,12 @@ prtversion `ports` ...
 
 description
 -----------
-    prtversion compares the versions from a local ports repository with the ones from repology and builds a list from it
+prtversion compares the versions from a local ports repository with the ones from repology and builds a list from it
 
-    it outputs a list of packages, one per line, with the following format:
-    ::
+it outputs a list of packages, one per line, with the following format:
+::
 
-        package : local -> remote
+    package : local -> remote
 
 example
 -------
