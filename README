@@ -35,11 +35,10 @@ prtutils
 
 usage
 -----
+    # scripts
     $ cd src
     $ ./$script
-
-documentation
--------------
+    # documentation
     $ cd doc
     $ ./make.sh
     $ man man/$script.1.gz
