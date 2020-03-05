@@ -2,6 +2,11 @@
 #
 # prtupdate - build a package and update its footprint & signature
 
+[ -f Pkgfile ] || {
+    echo 'error : no Pkgfile to update' >&2
+    exit 1
+}
+
 for opt in do us d uf us; do
     fakeroot pkgmk -"$opt"
 done

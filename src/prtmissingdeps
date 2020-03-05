@@ -2,7 +2,7 @@
 #
 # prtmissingdeps - find dependencies that are missing from the system
 
-declare -A installed aliases
+declare -A installed aliases missing
 
 # store aliases
 while IFS=': ' read -r alias orig; do
@@ -22,8 +22,10 @@ done <<< $list
 # find missing dependencies
 while read -r pkg; do
     for dependency in $(prt-get quickdep "$pkg"); {
-        ((installed[$dependency])) || echo "$dependency"
-    } &
+        ((installed[$dependency])) || missing[$dependency]=
+    }
 done <<< $list
 
-wait
+for pkg in "${!missing[@]}"; {
+    echo "$pkg"
+}

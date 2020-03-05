@@ -11,7 +11,7 @@ done < /var/lib/pkg/prt-get.aliases
 while read -r pkg; do
     [[
         ${aliases[$pkg]} &&
-        $(prt-get dependent "${aliases[$pkg]}")
+        -n $(prt-get dependent "${aliases[$pkg]}")
     ]] && continue
 
     path=$(prt-get path "$pkg")

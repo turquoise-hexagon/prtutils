@@ -38,9 +38,16 @@ usage
     $ cd src
     $ ./$script
 
+documentation
+-------------
+    $ cd doc
+    $ ./make.sh
+    # cp man/* /usr/share/man/man1
+
 depends on
 ----------
     * bash
+    * docutils
     * glibc
     * pkgutils
     * prt-get
