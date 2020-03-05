@@ -20,7 +20,9 @@ prtexport exports an installed package to a crux package archive using the files
 
 example
 -------
-|    $ prtexport bash
-|    bin/bash
-|    etc/profile
-|    usr/share/man/man1/bash.1.gz
+::
+
+    $ prtexport bash
+    bin/bash
+    etc/profile
+    usr/share/man/man1/bash.1.gz
