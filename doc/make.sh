@@ -47,3 +47,5 @@ mkdir -p man
         [[ $line =~ \++\ rst2man ]] &&
             printf '%s\n' "$line"
     done
+
+:
