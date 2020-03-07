@@ -34,10 +34,16 @@ mkdir -p man
     set -x
 
     for rst in "${!array[@]}"; {
-        rst2man.py "$rst" | gzip > "${array[$rst]}"
+        # trim down manpages
+        gzip -9 > "${array[$rst]}" < <(
+            while IFS= read -r line; do
+                [[ $line =~ ^'.\"' ]] ||
+                    printf '%s\n' "$line"
+            done < <(rst2man.py "$rst")
+        )
     }
 } |&
     while IFS= read -r line; do
-        [[ $line =~ '+ 'for ]] ||
+        [[ $line =~ \++\ rst2man ]] &&
             printf '%s\n' "$line"
     done
