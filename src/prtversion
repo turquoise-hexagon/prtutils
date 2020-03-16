@@ -33,7 +33,7 @@ while read -r line; do
     var=${BASH_REMATCH[1]}
     pkg=${tmp_pkg[i]}
     cur=${tmp_ver[i]}
-    ((i++))
+    ((++i))
 
     case $var in
         -) n_ver+=("$pkg : $cur -> $var");;
