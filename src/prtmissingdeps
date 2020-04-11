@@ -26,6 +26,4 @@ while read -r pkg; do
     }
 done <<< $list
 
-for pkg in "${!missing[@]}"; {
-    echo "$pkg"
-}
+printf '%s\n' "${!missing[@]}"
