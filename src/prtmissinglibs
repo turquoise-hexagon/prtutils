@@ -21,4 +21,6 @@ done < <(
     ldd $list 2> /dev/null
 )
 
-printf '%s\n' "${!array[@]}"
+for lib in "${!array[@]}"; {
+    echo "$lib"
+}
