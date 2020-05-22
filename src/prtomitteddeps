@@ -3,7 +3,7 @@
 # prtomitteddeps - find dependencies that were omitted from a package description
 
 list=$(pkginfo -l "$1" 2> /dev/null) || {
-    echo "usage : ${0##*/} [package]" >&2
+    echo "usage : ${0##*/} <package>" >&2
     exit 1
 }
 

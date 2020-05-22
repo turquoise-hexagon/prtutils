@@ -12,7 +12,7 @@ find dependencies that were omitted from a package description
 
 synopsis
 --------
-prtomitteddeps `package`
+prtomitteddeps `<package>`
 
 description
 -----------

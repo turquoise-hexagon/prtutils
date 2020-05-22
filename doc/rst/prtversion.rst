@@ -12,7 +12,7 @@ compare local versions with versions from repology
 
 synopsis
 --------
-prtversion `ports` ...
+prtversion `<ports>` ...
 
 description
 -----------

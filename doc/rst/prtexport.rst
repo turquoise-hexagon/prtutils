@@ -12,7 +12,7 @@ export an installed package to a crux package
 
 synopsis
 --------
-prtexport `package`
+prtexport `<package>`
 
 description
 -----------

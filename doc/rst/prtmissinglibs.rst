@@ -12,7 +12,7 @@ find libraries that were linked to a package but are missing from the system
 
 synopsis
 --------
-prtmissinglibs `package`
+prtmissinglibs `<package>`
 
 description
 -----------

@@ -3,7 +3,7 @@
 # prtorphans - find packages that can be safely removed with a package
 
 dependencies=$(prt-get quickdep "$1" 2> /dev/null) || {
-    echo "usage : ${0##*/} [package]" >&2
+    echo "usage : ${0##*/} <package>" >&2
     exit 1
 }
 

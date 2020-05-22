@@ -12,7 +12,7 @@ find files that were installed by packages but are now missing from the system
 
 synopsis
 --------
-prtmissingdeps `package`
+prtmissingdeps `<package>`
 
 description
 -----------

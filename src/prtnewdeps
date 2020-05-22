@@ -3,7 +3,7 @@
 # prtnewdeps - find dependencies that needs to be installed for a package
 
 list=$(prt-get depends "$1" 2> /dev/null) || {
-    echo "usage : ${0##*/} [package]" >&2
+    echo "usage : ${0##*/} <package>" >&2
     exit 1
 }
 

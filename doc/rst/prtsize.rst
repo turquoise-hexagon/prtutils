@@ -12,7 +12,7 @@ find size of a installed package
 
 synopsis
 --------
-prtsize `package`
+prtsize `<package>`
 
 description
 -----------

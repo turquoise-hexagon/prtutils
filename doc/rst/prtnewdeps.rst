@@ -12,7 +12,7 @@ find dependencies that needs to be installed for a package
 
 synopsis
 --------
-prtnewdeps `package`
+prtnewdeps `<package>`
 
 description
 -----------

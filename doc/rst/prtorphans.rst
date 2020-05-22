@@ -12,7 +12,7 @@ find packages that can be safely removed with a package
 
 synopsis
 --------
-prtorphans `package`
+prtorphans `<package>`
 
 description
 -----------

@@ -3,7 +3,7 @@
 # prtmissingfiles - find files that were installed by packages but are now missing from the system
 
 list=$(pkginfo -l "$1" 2> /dev/null) || {
-    echo "usage : ${0##*/} [package]" >&2
+    echo "usage : ${0##*/} <package>" >&2
     exit 1
 }
 

@@ -12,7 +12,7 @@ find packages that can be safely removed
 
 synopsis
 --------
-prtorphaned `ports` ...
+prtorphaned `<ports>` ...
 
 description
 -----------
