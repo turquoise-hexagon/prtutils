@@ -1,0 +1,4 @@
++++ /usr/bin/rst2man.py rst/prtmissinglibs.rst
++++ /usr/bin/rst2man.py rst/prtnewdeps.rst
++++ /usr/bin/rst2man.py rst/prtmissing.rst
++++ /usr/bin/rst2man.py rst/prtupdate.rst

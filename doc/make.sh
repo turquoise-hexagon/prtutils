@@ -3,7 +3,9 @@
 cd "${0%/*}"
 
 # check for rst2man
-type rst2man.py &> /dev/null || {
+_() { command -v "$1"; }
+
+{ r2m=$(_ rst2man.py) || r2m=$(_ rst2man); } || {
     echo 'error : install docutils first' >&2
     exit 1
 }
@@ -39,12 +41,12 @@ mkdir -p man
             while IFS= read -r line; do
                 [[ $line =~ ^'.\"' ]] ||
                     printf '%s\n' "$line"
-            done < <(rst2man.py "$rst")
+            done < <("$r2m" "$rst")
         )
     }
 } |&
     while IFS= read -r line; do
-        [[ $line =~ \++\ rst2man ]] &&
+        [[ $line =~ ^'+++' ]] &&
             printf '%s\n' "$line"
     done
 
