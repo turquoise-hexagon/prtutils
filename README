@@ -39,14 +39,15 @@ usage
         $ cd src
         $ ./$script
     * documentation
-        $ cd doc
-        $ ./make.sh
-        $ man man/$script.1.gz
+        $ make
+        $ cd doc/man
+        $ man ./$script.1.gz
 
 depends on
 ----------
     * bash
     * docutils
     * glibc
+    * make
     * pkgutils
     * prt-get
