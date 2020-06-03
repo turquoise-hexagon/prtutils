@@ -33,21 +33,23 @@ for rst in rst/*.rst; {
 mkdir -p man
 
 {
-    set -x
-
     for rst in "${!array[@]}"; {
         # trim down manpages
         gzip -9 > "${array[$rst]}" < <(
             while IFS= read -r line; do
                 [[ $line =~ ^'.\"' ]] ||
                     printf '%s\n' "$line"
-            done < <("$r2m" "$rst")
+            done < <(
+                set -x
+                "$r2m" "$rst"
+                set +x
+            )
         )
     }
 } |&
     while IFS= read -r line; do
-        [[ $line =~ ^'+++' ]] &&
-            printf '%s\n' "$line"
+        [[ $line =~ ^'+++ '([^'set'].*) ]] &&
+            printf '%s\n' "${BASH_REMATCH[1]}"
     done
 
 :
