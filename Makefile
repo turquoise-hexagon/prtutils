@@ -21,9 +21,9 @@ install : all
 
 uninstall :
 	@echo "uninstalling manpages and binaries..."
-	@for script in src/*; do        \
-		script=$${script##*/};      \
-		rm $(BINDIR)/$$script; 	    \
+	@for script in src/*; do \
+		script=$${script##*/}; \
+		rm $(BINDIR)/$$script; \
 		rm $(MANDIR)/$$script.1.gz; \
 	done
 
