@@ -19,4 +19,4 @@ while read -r pkg; do
     for repo; {
         [[ $path =~ $repo/$pkg$ ]] && break
     } || echo "$pkg"
-done < <(prt-get listorphans)
+done <<< $(prt-get listorphans)

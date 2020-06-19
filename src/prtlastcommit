@@ -21,8 +21,8 @@ trap 'rm -rf "$name"' EXIT
     git clone "${BASH_REMATCH[1]}" --depth=1 "$name" 2> /dev/null ||
         die 'error : failed to clone source'
 
-read -r sha time _ _ < \
-    <(git --git-dir="$name/.git" log --format='%H %ci')
+read -r sha time _ _ <<< \
+    $(git --git-dir="$name/.git" log --format='%H %ci')
 
 [[ $sha == "$commit" ]] &&
     die 'error : already up to date'

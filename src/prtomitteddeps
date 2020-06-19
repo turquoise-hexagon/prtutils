@@ -31,7 +31,7 @@ while read -r line; do
         ${files[${BASH_REMATCH[1]}]} \
     ]] &&
         packages[${files[${BASH_REMATCH[1]}]}]=1
-done < <(
+done <<< $(
     cd /; IFS=$'\n'
 
     ldd $list 2> /dev/null

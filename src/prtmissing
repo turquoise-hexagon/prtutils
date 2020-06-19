@@ -4,6 +4,6 @@
 
 while read -r pkg; do
     prt-get info "$pkg" &> /dev/null || echo "$pkg" &
-done < <(prt-get listinst)
+done <<< $(prt-get listinst)
 
 wait

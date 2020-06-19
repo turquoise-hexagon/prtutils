@@ -10,7 +10,7 @@ files=$(pkginfo -l "$1" 2> /dev/null) || {
 # get package size
 while read -r cur; do
     ((size += cur))
-done < <(
+done <<< $(
     IFS=$'\n'
 
     stat -c '%s' -- $(

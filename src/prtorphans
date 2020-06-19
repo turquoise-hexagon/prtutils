@@ -13,7 +13,7 @@ for dependency in $dependencies; {
         for package in $dependencies; {
             [[ $dependent == "$package" ]] && break
         } || continue 2
-    done < <(prt-get dependent --recursive "$dependency")
+    done <<< $(prt-get dependent --recursive "$dependency")
 
     echo "$dependency"
 }

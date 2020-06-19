@@ -15,7 +15,7 @@ while read -r line; do
         ${BASH_REMATCH[2]} == not
     ]] &&
         array[${BASH_REMATCH[1]}]=
-done < <(
+done <<< $(
     cd /; IFS=$'\n'
 
     ldd $list 2> /dev/null
