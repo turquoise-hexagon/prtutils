@@ -23,8 +23,8 @@ uninstall :
 	@echo "uninstalling manpages and binaries..."
 	@for script in src/*; do \
 		script=$${script##*/}; \
-		rm -f $(BINDIR)/$$script; \
-		rm -f $(MANDIR)/$$script.1.gz; \
+		rm -f $(BINDIR)/"$$script"; \
+		rm -f $(MANDIR)/"$$script.1.gz"; \
 	done
 
 .PHONY : all clean install uninstall
