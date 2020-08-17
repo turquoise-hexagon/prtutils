@@ -1,20 +1,26 @@
 #!/bin/bash
 #
-# prtcommmit - commit ports changes to git with a formatted message
+# prtcommit - commit ports changes to git with a formatted message
+
+declare -A array
+
+while read -r name version release; do
+    array[$name]=$version-$release
+done <<< $(prt-get printf '%n %v %r\n')
 
 for dir in */; {
     . "${dir}Pkgfile" 2> /dev/null && {
         # compare versions
         var=$version-$release
-        cur=$(prt-get printf '%v-%r' --filter="$name")
+        cur=${array[$name]}
 
         git add "$dir"
 
         # commit with the relevant message
         case $cur in
-           '') git commit -m "add $name";;
-            $var) ;; # do nothing
-            *) git commit -m "$name : $cur -> $var"
+            '') git commit -m "add $name";;
+             $var) ;; # do nothing
+             *) git commit -m "$name : $cur -> $var"
         esac
     }
 }
