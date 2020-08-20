@@ -1,9 +1,20 @@
 #!/bin/bash
-#
-# prtmissing - find packages that are missing from available ports
+
+declare -A array
+
+shopt -s globstar
+
+for file in /usr/ports/**; {
+    [[ $file =~ \/Pkgfile ]] && {
+        prt=${file%/*}
+        prt=${prt##*/}
+        array[$prt]=1
+    }
+}
+
+shopt -u globstar
 
 while read -r pkg; do
-    prt-get info "$pkg" &> /dev/null || echo "$pkg" &
+    [[ ${array[$pkg]} ]] ||
+        echo "$pkg"
 done <<< $(prt-get listinst)
-
-wait
