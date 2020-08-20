@@ -1,4 +1,6 @@
 #!/bin/bash
+#
+# prtmissing - find packages that are missing from available ports
 
 declare -A array
 
