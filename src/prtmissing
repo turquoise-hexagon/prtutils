@@ -4,19 +4,10 @@
 
 declare -A array
 
-shopt -s globstar
-
-for file in /usr/ports/**; {
-    [[ $file =~ \/Pkgfile ]] && {
-        prt=${file%/*}
-        prt=${prt##*/}
-        array[$prt]=1
-    }
-}
-
-shopt -u globstar
+while read -r pkg; do
+    array[$pkg]=1
+done <<< $(prt-get list)
 
 while read -r pkg; do
-    [[ ${array[$pkg]} ]] ||
-        echo "$pkg"
+    [[ ${array[$pkg]} ]] || echo "$pkg"
 done <<< $(prt-get listinst)
