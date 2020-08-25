@@ -4,19 +4,32 @@
 
 declare -A aliases
 
-while IFS=': ' read -r alias orig; do
-    aliases[$alias]=$orig
+while IFS=': ' read -r key val; do
+    aliases[$key]=$var
 done < /var/lib/pkg/prt-get.aliases
 
-while read -r pkg; do
-    [[
-        ${aliases[$pkg]} &&
-        -n $(prt-get dependent "${aliases[$pkg]}")
-    ]] && continue
+declare -A paths
 
-    path=$(prt-get path "$pkg")
+shopt -s globstar
+
+for path in /usr/ports/**; {
+    [[ $path =~ \/Pkgfile$ ]] && {
+        path=${path%\/*}
+        name=${path##*/}
+
+        paths[$name]=$path
+    }
+}
+
+shopt -u globstar
+
+
+while read -r pkg; do
+    [[ ${aliases[$pkg]} && -n \
+        $(prt-get dependent "${aliases[$pkg]}") ]] &&
+        continue
 
     for repo; {
-        [[ $path =~ $repo/$pkg$ ]] && break
+        [[ ${paths[$pkg]} =~ $repo/$pkg$ ]] && break
     } || echo "$pkg"
 done <<< $(prt-get listorphans)
