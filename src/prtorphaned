@@ -10,19 +10,9 @@ done < /var/lib/pkg/prt-get.aliases
 
 declare -A paths
 
-shopt -s globstar
-
-for path in /usr/ports/**; {
-    [[ $path =~ \/Pkgfile$ ]] && {
-        path=${path%\/*}
-        name=${path##*/}
-
-        paths[$name]=$path
-    }
-}
-
-shopt -u globstar
-
+while read -r name path; do
+    paths[$name]=$path/$name
+done <<< $(prt-get printf '%n %p\n')
 
 while read -r pkg; do
     [[ ${aliases[$pkg]} && -n \
