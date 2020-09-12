@@ -1,0 +1,35 @@
+#!/bin/bash
+#
+# prtinvaliddeps - get list of invalid dependencies
+
+DIR=/usr/ports
+
+declare -A array
+
+shopt -s globstar
+
+for file in "$DIR"/**/Pkgfile; {
+    name=${file%/Pkgfile}
+    name=${name##*/}
+
+    array[$name]=$file
+}
+
+shopt -u globstar
+
+shopt -s nocasematch
+
+for pkg in "${!array[@]}"; {
+    while read -r line; do
+        [[ $line =~ ^'# depends on'\ *:(.*)$ ]] && {
+            IFS+=, read -ra tmp <<< ${BASH_REMATCH[1]}
+
+            for dep in "${tmp[@]}"; {
+                [[ ${array[$dep]} ]] ||
+                    printf '%s -> %s\n' "$pkg" "$dep"
+            }
+
+            break
+        }
+    done < "${array[$pkg]}"
+}
