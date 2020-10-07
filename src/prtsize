@@ -2,10 +2,13 @@
 #
 # prtsize - find size of a installed package
 
-files=$(pkginfo -l "$1" 2> /dev/null) || {
-    echo "usage : ${0##*/} <package>" >&2
+die() {
+    printf '%s\n' "${1:-usage : ${0##*/} <package>}" >&2
     exit 1
 }
+
+files=$(pkginfo -l "$1" 2> /dev/null) ||
+    die
 
 # get package size
 while read -r cur; do
@@ -15,7 +18,8 @@ done <<< $(
 
     stat -c '%s' -- $(
         while read -r file; do
-            [[ $file =~ /$ ]] || echo "/$file"
+            [[ $file =~ /$ ]] ||
+                printf '/%s\n' "$file"
         done <<< $files
     ) 2> /dev/null
 )
@@ -27,4 +31,4 @@ for ((b = size; b > 1024; b /= 1024, ++i)) {
     d=.$((b % 1024 * 10 / 1024))
 }
 
-echo "$b$d${units[i]}"
+printf '%s%s%s\n' "$b" "$d" "${units[i]}"

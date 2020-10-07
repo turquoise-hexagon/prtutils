@@ -2,12 +2,15 @@
 #
 # prtnewdeps - find dependencies that needs to be installed for a package
 
-list=$(prt-get depends "$1" 2> /dev/null) || {
-    echo "usage : ${0##*/} <package>" >&2
+die() {
+    printf '%s\n' "${1:-usage : ${0##*/} <package>}" >&2
     exit 1
 }
 
+list=$(prt-get depends "$1" 2> /dev/null) ||
+    die
+
 while read -r line; do
     [[ $line =~ ^'[ ] '(.*) ]] &&
-        echo "${BASH_REMATCH[1]}"
+        printf '%s\n' "${BASH_REMATCH[1]}"
 done <<< $list

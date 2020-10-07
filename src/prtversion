@@ -2,18 +2,21 @@
 #
 # prtversion - compare local versions with versions from repology
 
+die() {
+    printf '%s\n' "${1:-usage : ${0##*/} <repo>}" >&2
+    exit 1
+}
+
 display() {
     declare -n tmp=$1
 
     for msg in "${tmp[@]}"; {
-        echo "$msg"
+        printf '%s\n' "$msg"
     }
 }
 
-(($#)) || {
-    echo "usage : ${0##*/} <repo>" >&2
-    exit 1
-}
+(($#)) ||
+    die
 
 # build a list of packages
 while read -r pkg ver path; do

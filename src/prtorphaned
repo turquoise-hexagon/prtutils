@@ -21,5 +21,6 @@ while read -r pkg; do
 
     for repo; {
         [[ ${paths[$pkg]} =~ $repo/$pkg$ ]] && break
-    } || echo "$pkg"
+    } ||
+        printf '%s\n' "$pkg"
 done <<< $(prt-get listorphans)

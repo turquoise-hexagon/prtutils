@@ -3,7 +3,7 @@
 # prtlastcommit - set Pkgfile to the last commit available from git{hub,lab}
 
 die() {
-    echo "$1" >&2
+    printf '%s\n' "$1" >&2
     exit 1
 }
 

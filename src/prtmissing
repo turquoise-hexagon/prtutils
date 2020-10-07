@@ -9,5 +9,6 @@ while read -r pkg; do
 done <<< $(prt-get list)
 
 while read -r pkg; do
-    [[ ${array[$pkg]} ]] || echo "$pkg"
+    [[ ${array[$pkg]} ]] ||
+        printf '%s\n' "$pkg"
 done <<< $(prt-get listinst)

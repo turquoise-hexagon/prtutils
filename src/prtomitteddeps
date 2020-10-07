@@ -2,10 +2,13 @@
 #
 # prtomitteddeps - find dependencies that were omitted from a package description
 
-list=$(pkginfo -l "$1" 2> /dev/null) || {
-    echo "usage : ${0##*/} <package>" >&2
+die() {
+    printf '%s\n' "${1:-usage : ${0##*/} <package>}" >&2
     exit 1
 }
+
+list=$(pkginfo -l "$1" 2> /dev/null) ||
+    die
 
 declare -A files packages
 
@@ -25,6 +28,8 @@ while read -r line; do
     files[/$line]=$pkg
 done < /var/lib/pkg/db
 
+mapfile -t <<< $list
+
 while read -r line; do
     [[
         $line =~ '=> '(.*)\       &&
@@ -32,9 +37,9 @@ while read -r line; do
     ]] &&
         packages[${files[${BASH_REMATCH[1]}]}]=1
 done <<< $(
-    cd /; IFS=$'\n'
+    cd /
 
-    ldd $list 2> /dev/null
+    ldd -- "${MAPFILE[@]}" 2> /dev/null
 )
 
 depends=$(prt-get quickdep "$1")
@@ -45,5 +50,5 @@ for pkg in "${!packages[@]}"; {
         [[ $pkg == "$dep" ]] && continue 2
     }
 
-    echo "$pkg"
+    printf '%s\n' "$pkg"
 }

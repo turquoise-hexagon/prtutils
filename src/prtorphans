@@ -2,10 +2,13 @@
 #
 # prtorphans - find packages that can be safely removed with a package
 
-dependencies=$(prt-get quickdep "$1" 2> /dev/null) || {
-    echo "usage : ${0##*/} <package>" >&2
+die() {
+    printf '%s\n' "${1:-usage : ${0##*/} <package>}" >&2
     exit 1
 }
+
+dependencies=$(prt-get quickdep "$1" 2> /dev/null) ||
+    die
 
 for dependency in $dependencies; {
     # check if all dependents are dependencies
@@ -15,5 +18,5 @@ for dependency in $dependencies; {
         } || continue 2
     done <<< $(prt-get dependent --recursive "$dependency")
 
-    echo "$dependency"
+    printf '%s\n' "$dependency"
 }

@@ -2,11 +2,15 @@
 #
 # prtmissingfiles - find files that were installed by packages but are now missing from the system
 
-list=$(pkginfo -l "$1" 2> /dev/null) || {
-    echo "usage : ${0##*/} <package>" >&2
+die() {
+    printf '%s\n' "${1:-usage : ${0##*/} <package>}" >&2
     exit 1
 }
 
+list=$(pkginfo -l "$1" 2> /dev/null) ||
+    die
+
 while read -r file; do
-    [[ -e /$file ]] || echo "/$file"
+    [[ -e /$file ]] ||
+        printf '/%s\n' "$file"
 done <<< $list
