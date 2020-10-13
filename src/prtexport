@@ -10,11 +10,9 @@ die() {
 version=$(prt-get current "$1") ||
     die
 
-mapfile -t <<< $(
-    while read -r file; do
-        # strip directories
-        [[ $file =~ \/$ ]] ||
-            printf '%s\n' "$file"
-    done <<< $(pkginfo -l "$1"))
+while read -r file; do
+    [[ $file =~ \/$ ]] ||
+        files+=("$file")
+done <<< $(pkginfo -l "$1")
 
-tar czvf "$1#$version.pkg.tar.gz" -C / -- "${MAPFILE[@]}"
+tar czvf "$1#$version.pkg.tar.gz" -C / -- "${files[@]}"
