@@ -1,33 +1,30 @@
 #!/bin/bash
 #
-# prtsize - find size of a installed package
+# prtsize - find size of an installed package
 
 die() {
     printf '%s\n' "${1:-usage : ${0##*/} <package>}" >&2
     exit 1
 }
 
-files=$(pkginfo -l "$1" 2> /dev/null) ||
+# get list of files
+list=$(pkginfo -l "$1" 2> /dev/null) ||
     die
 
-# get package size
-while read -r cur; do
-    ((size += cur))
-done <<< $(
-    IFS=$'\n'
+while read -r file; do
+    [[ $file =~ \/$ ]] ||
+        files+=("/$file")
+done <<< $list
 
-    stat -c '%s' -- $(
-        while read -r file; do
-            [[ $file =~ /$ ]] ||
-                printf '/%s\n' "$file"
-        done <<< $files
-    ) 2> /dev/null
-)
+# get package size
+while read -r size; do
+    ((sum += size))
+done <<< $(stat -c '%s' -- "${files[@]}" 2> /dev/null)
 
 # make size human readable
 units=(B K M G T)
 
-for ((b = size; b > 1024; b /= 1024, ++i)) {
+for ((b = sum; b > 1024; b /= 1024, ++i)) {
     d=.$((b % 1024 * 10 / 1024))
 }
 
