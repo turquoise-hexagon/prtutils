@@ -5,7 +5,7 @@
 declare -A aliases
 
 while IFS=': ' read -r key val; do
-    aliases[$key]=$var
+    aliases[$key]=$val
 done < /var/lib/pkg/prt-get.aliases
 
 declare -A paths

@@ -29,6 +29,11 @@ while read -r pkg ver path; do
         }
 done <<< $(prt-get printf '%n %v %p\n')
 
+read -ra list <<< $(
+    # build a list of urls
+    printf 'https://repology.org/badge/latest-versions/%s.svg?header= ' "${tmp_pkg[@]}"
+)
+
 while read -r line; do
     # parse svgs
     [[ ${line##*middle\">} =~ ([^<, ]+) ]]
@@ -40,14 +45,10 @@ while read -r line; do
 
     case $var in
         -) n_ver+=("$pkg : $cur -> $var");;
-        $cur) ;; # do nothing
+        "$cur") ;; # do nothing
         *) y_ver+=("$pkg : $cur -> $var")
     esac
-done <<< $(
-    curl -w '\n' -s $(
-        # build a list of urls
-        printf 'https://repology.org/badge/latest-versions/%s.svg?header= ' "${tmp_pkg[@]}"
-    ))
+done <<< $(curl -w '\n' -s "${list[@]}")
 
 display y_ver
 display n_ver

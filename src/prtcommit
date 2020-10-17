@@ -19,7 +19,7 @@ for dir in */; {
         # commit with the relevant message
         case $cur in
             '') git commit -m "add $name";;
-             $var) ;; # do nothing
+             "$var") ;; # do nothing
              *) git commit -m "$name : $cur -> $var"
         esac
     }
