@@ -34,7 +34,8 @@ printf '%s\n' "$(
     while IFS= read -r line; do
         case $line in
             commit*)  line=commit=$sha;;
-            version*) line=version=$time
+            version*) line=version=$time;;
+            release*) line=release=1
         esac
 
         printf '%s\n' "$line"
