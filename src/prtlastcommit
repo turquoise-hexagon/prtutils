@@ -39,5 +39,4 @@ printf '%s\n' "$(
         esac
 
         printf '%s\n' "$line"
-    done < Pkgfile
-)" > Pkgfile
+    done < Pkgfile)" > Pkgfile
