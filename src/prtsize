@@ -17,15 +17,8 @@ while read -r file; do
 done <<< $list
 
 # get package size
-while read -r size; do
-    ((sum += size))
-done <<< $(stat -c '%s' -- "${files[@]}" 2> /dev/null)
+while read -r size _; do
+    out=$size
+done <<< $(du -c -h "${files[@]}")
 
-# make size human readable
-units=(B K M G T)
-
-for ((b = sum; b > 1024; b /= 1024, ++i)) {
-    d=.$((b % 1024 * 10 / 1024))
-}
-
-printf '%s%s%s\n' "$b" "$d" "${units[i]}"
+printf '%s\n' "$out"
