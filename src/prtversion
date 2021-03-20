@@ -1,54 +1,73 @@
 #!/bin/bash
 #
-# prtversion - compare local versions with versions from repology
+# prtversion - compare local versions to repology versions
 
 die() {
     printf '%s\n' "${1:-usage : ${0##*/} <repo>}" >&2
+
     exit 1
 }
 
-display() {
-    declare -n tmp=$1
+sanitize_version() {
+    ver=${1//[^0-9.-]}
 
-    for msg in "${tmp[@]}"; {
-        printf '%s\n' "$msg"
-    }
+    while [[ $ver =~ '.0'$ ]]; do
+        ver=${ver%.0}
+    done
+
+    printf '%s\n' "$ver"
 }
 
-(($#)) ||
-    die
-
-# build a list of packages
-while read -r pkg ver path; do
-    [[ $ver == git ]] ||
-        for repo; {
-            [[ $path =~ /$repo$ ]] && {
-                tmp_pkg+=("$pkg")
-                tmp_ver+=("$ver")
-            }
+# store list of package files
+while read -r path pkg; do
+    for repo; {
+        [[ ${path##*/} == "$repo" ]] && {
+            pkgfiles+=("$path/$pkg/Pkgfile")
         }
-done <<< $(prt-get printf '%n %v %p\n')
+    }
+done <<< $(prt-get printf '%p %n\n')
 
-# build a list of urls
-for pkg in "${tmp_pkg[@]}"; {
-    list+=("https://repology.org/badge/latest-versions/$pkg.svg?header=")
+((${#pkgfiles[@]})) || die
+
+# store list of package versions
+for pkgfile in "${pkgfiles[@]}"; {
+    unset name commit version
+
+    . "$pkgfile" 2> /dev/null &&
+        # don't store git & commit packages
+        [[ ! $commit && $version != git ]] && {
+            pkgs+=("$name")
+            vers+=("$(sanitize_version "$version")")
+        }
 }
 
-while read -r line; do
-    # parse svgs
-    [[ ${line##*middle\">} =~ ([^<, ]+) ]]
+# store a list of URLs
+for pkg in "${pkgs[@]}"; {
+    urls+=("https://repology.org/badge/latest-versions/$pkg.svg?header=")
+}
 
-    var=${BASH_REMATCH[1]}
-    pkg=${tmp_pkg[i]}
-    cur=${tmp_ver[i]}
-    ((++i))
+# parse svgs
+((index == 0))
 
-    case $var in
-        -) n_ver+=("$pkg : $cur -> $var");;
-        "$cur") ;; # do nothing
-        *) y_ver+=("$pkg : $cur -> $var")
-    esac
-done <<< $(curl -w '\n' -s "${list[@]}")
+while IFS= read -r line; do
+    [[ ${line##*middle\">} =~ ([^<, ]+) ]] && {
+        remote=$(sanitize_version "${BASH_REMATCH[1]}")
 
-display y_ver
-display n_ver
+        pkg=${pkgs[index]}
+        ver=${vers[index]}
+
+        # take decision
+        case $remote in
+            -) out_u+=("$pkg : $ver -> $remote");;
+            $ver) ;; # do nothing
+            *) out_m+=("$pkg : $ver -> $remote");;
+        esac
+    }
+
+    ((++index))
+done <<< $(curl -w '\n' -s "${urls[@]}")
+
+# print everything
+for line in "${out_m[@]}" "${out_u[@]}"; {
+    printf '%s\n' "$line"
+}
