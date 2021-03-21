@@ -37,7 +37,7 @@ for pkgfile in "${pkgfiles[@]}"; {
         # don't store git & commit packages
         [[ ! $commit && $version != git ]] && {
             pkgs+=("$name")
-            vers+=("$(sanitize_version "$version")")
+            vers+=("$version")
         }
 }
 
@@ -51,15 +51,15 @@ for pkg in "${pkgs[@]}"; {
 
 while IFS= read -r line; do
     [[ ${line##*middle\">} =~ ([^<, ]+) ]] && {
-        remote=$(sanitize_version "${BASH_REMATCH[1]}")
+        remote=${BASH_REMATCH[1]}
 
         pkg=${pkgs[index]}
         ver=${vers[index]}
 
         # take decision
-        case $remote in
+        case $(sanitize_version "$remote") in
             -) out_u+=("$pkg : $ver -> $remote");;
-            $ver) ;; # do nothing
+            $(sanitize_version "$ver")) ;; # do nothing
             *) out_m+=("$pkg : $ver -> $remote");;
         esac
     }
