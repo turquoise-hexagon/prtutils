@@ -9,11 +9,20 @@ die() {
 }
 
 sanitize_version() {
+    # remove extra characters
     read -ra split <<< ${1//[^0-9]/ }
 
+    # remove extra zeros
+    for index in "${!split[@]}"; {
+        [[ ${split[index]} =~ 0*(.+) ]] &&
+            split[index]=${BASH_REMATCH[1]}
+    }
+
+    # turn into a proper version string
     str=${split[*]}
     str=${str// /.}
 
+    # remove trailing zeros
     while [[ $str =~ '.0'$ ]]; do
         str=${str%.0}
     done
