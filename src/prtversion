@@ -9,13 +9,16 @@ die() {
 }
 
 sanitize_version() {
-    ver=${1//[^0-9.-]}
+    read -ra split <<< ${1//[^0-9]/ }
 
-    while [[ $ver =~ '.0'$ ]]; do
-        ver=${ver%.0}
+    str=${split[*]}
+    str=${str// /.}
+
+    while [[ $str =~ '.0'$ ]]; do
+        str=${str%.0}
     done
 
-    printf '%s\n' "$ver"
+    printf '%s\n' "$str"
 }
 
 # store list of package files
@@ -58,8 +61,8 @@ while IFS= read -r line; do
 
         # take decision
         case $(sanitize_version "$remote") in
-            -) out_u+=("$pkg : $ver -> $remote");;
-            $(sanitize_version "$ver")) ;; # do nothing
+           '') out_u+=("$pkg : $ver -> $remote");;
+            "$(sanitize_version "$ver")") ;; # do nothing
             *) out_m+=("$pkg : $ver -> $remote");;
         esac
     }
