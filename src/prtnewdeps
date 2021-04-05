@@ -14,3 +14,5 @@ while read -r line; do
     [[ $line =~ ^'[ ] '(.*) ]] &&
         printf '%s\n' "${BASH_REMATCH[1]}"
 done <<< $list
+
+:
