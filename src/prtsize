@@ -19,6 +19,6 @@ done <<< $list
 # get package size
 while read -r size _; do
     out=$size
-done <<< $(du -c -h "${files[@]}")
+done <<< $(du -c -h "${files[@]}" 2> /dev/null)
 
 printf '%s\n' "$out"
