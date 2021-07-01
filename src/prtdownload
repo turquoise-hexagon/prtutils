@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+die() {
+    printf '%s\n' "${1:-usage : ${0##*/} <package>}" >& 2
+}
+
+{
+    path=$(
+        prt-get path "$1" 2> /dev/null
+    ) &&
+        . "$path/Pkgfile" &> /dev/null
+} ||
+    die
+
+for file in "${source[@]}"; {
+    [[ $file =~ ^(http|https|ftp|file) ]] && {
+        wget "$file" ||
+            die 'error : failed to download sources'
+
+        continue
+    }
+
+    cp -v -r "$path/$file" . ||
+        die 'error : failed to download sources'
+}
