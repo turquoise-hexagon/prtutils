@@ -1,26 +1,46 @@
 #!/bin/bash
-#
-# prtcommit - commit ports changes to git with a formatted message
 
-declare -A array
+cd_git_repo() {
+    while [[ $PWD != / ]]; do
+        if [[ -d $PWD/.git ]]; then
+            return 0
+        fi
 
-while read -r name version release; do
-    array[$name]=$version-$release
-done <<< $(prt-get printf '%n %v %r\n')
+        cd ..
+    done
 
-for dir in */; {
-    . "${dir}Pkgfile" 2> /dev/null && {
+    return 1
+}
+
+cd_git_repo || {
+    echo "error : '${0##*/}' must be run from a git repo" >&2
+
+    exit 1
+}
+
+declare -A cache
+
+repo=${PWD##*/}
+
+while IFS=' ' read -r path name version release; do
+    if [[ ${path##*/} == "$repo" ]]; then
+        cache[$name]=$version-$release
+    fi
+done <<< $(prt-get printf '%p %n %v %r\n')
+
+for dir in */; do
+    if source "$dir/Pkgfile" 2> /dev/null; then
         # compare versions
-        var=$version-$release
-        cur=${array[$name]}
+        local_version=$version-$release
+        global_version=${cache[$name]}
 
         git add "$dir"
 
-        # commit with the relevant message
-        case $cur in
+        # commit with relevant message
+        case $global_version in
             '') git commit -m "add $name";;
-             "$var") ;; # do nothing
-             *) git commit -m "$name : $cur -> $var"
+            $local_version) ;; # do nothing
+             *) git commit -m "$name : $global_version -> $local_version"
         esac
-    }
-}
+    fi
+done

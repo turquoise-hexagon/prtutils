@@ -18,4 +18,4 @@ description
 -----------
 prtcommit commits the changes made to a ports repository to git with a formatted message
 
-it requires to be run from the root of the ports repository
+it requires to be run from a port port repository
