@@ -1,4 +1,6 @@
 #!/bin/bash
+#
+# prtcommit - format & commit changes to local ports
 
 cd_git_repo() {
     while [[ $PWD != / ]]; do

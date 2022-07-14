@@ -2,35 +2,35 @@ prtutils
 ========
     various scripts for crux ports / packages management
 
-    * ports management
-        - prtcommit
+    ports management
+        * prtcommit
             commit ports changes to git with a formatted message
-        - prtlastcommit
+        * prtlastcommit
             set Pkgfile to the last commit available from git{hub,lab}
-        - prtupdate
+        * prtupdate
             build a package and update its footprint & signature
-        - prtversion
+        * prtversion
             compare local versions with versions from repology
-    * packages management
-        - prtexport
+    packages management
+        * prtexport
             export an installed package to a crux package
-        - prtmissing
+        * prtmissing
             find packages that are missing from available ports
-        - prtmissingdeps
+        * prtmissingdeps
             find dependencies that are missing from the system
-        - prtmissingfiles
+        * prtmissingfiles
             find files that were installed by packages but are now missing from the system
-        - prtmissinglibs
+        * prtmissinglibs
             find libraries that were linked to a package but are missing from the system
-        - prtnewdeps
+        * prtnewdeps
             find dependencies that needs to be installed for a package
-        - prtomitteddeps
+        * prtomitteddeps
             find dependencies that were omitted from a package description
-        - prtorphaned
+        * prtorphaned
             find packages that can be safely removed
-        - prtorphans
+        * prtorphans
             find packages that can be safely removed with a package
-        - prtsize
+        * prtsize
             find size of a installed package
 
 usage
@@ -40,7 +40,7 @@ usage
         $ ./$script
     * documentation
         $ make
-        $ cd doc/man
+        $ cd doc
         $ man ./$script.1.gz
 
 depends on
