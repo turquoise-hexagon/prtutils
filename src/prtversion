@@ -2,8 +2,16 @@
 #
 # prtversion - compare local versions to repology versions
 
+# ---
+# settings
+# ---
+
 readonly USER_AGENT='camille at laserbat dot pw'
 readonly API_URL=https://repology.org/api/v1/project
+
+# ---
+# functions
+# ---
 
 die() {
     printf '%s\n' "$1" >&2
@@ -12,102 +20,124 @@ die() {
 }
 
 sanitize_version() {
-    local _version
-    local _index
-    local _output
+    local _version _index _output
     local -a _version_parts
 
     _version=$1
 
+    # remove extra characters
     read -r -a _version_parts <<< ${_version//[^0-9]/ }
 
+    # remove leading 0s
     for _index in "${!_version_parts[@]}"; do
-        if [[ ${_version_parts[_index]} =~ 0*(.+) ]]; then
+        if [[ ${_version_parts[_index]} =~ '0'*(.+) ]]; then
             _version_parts[_index]=${BASH_REMATCH[1]}
         fi
     done
 
+    # put back together
     _output=${_version_parts[*]}
     _output=${_output// /.}
-    _output=${_output%.0}
+
+    # remove trailing .0s
+    while [[ $_output =~ '.0'$ ]]; do
+        _output=${_output%.0}
+    done
 
     printf '%s\n' "$_output"
 }
+
+# ---
+# main
+# ---
 
 if (($# != 1)); then
     die "usage : ${0##*/} <repo>"
 fi
 
-readonly repo=$1
+readonly repo_name=$1
 
-declare -A packages
+declare -A package_metadatas
+declare -a package_names
 
 while IFS=' ' read -r repo_path package_name; do
-    if [[ $repo_path =~ /$repo$ ]]; then
+    # select only relevant packages
+    if [[ $repo_path =~ /$repo_name$ ]]; then
         pkgfile_path=$repo_path/$package_name/Pkgfile
 
         if [[ -f $pkgfile_path ]]; then
             unset commit name version
 
-            if ! . "$pkgfile_path" &> /dev/null; then
+            if ! . "$pkgfile_path"; then
                 die "error : failed to source '$pkgfile_path'"
             fi
 
+            # no git package, no commit package
             if [[ $version != git && ! $commit ]]; then
-                packages[$name]=$version
+                package_metadatas[$name]=$version
+                package_names+=("$name")
             fi
         fi
     fi
-done \
-<<< $(prt-get printf '%p %n\n')
+done <<< $(prt-get printf '%p %n\n')
 
-if ((${#packages[@]} == 0)); then
-    die "error : no packages found in '$repo'"
+if ((${#package_names[@]} == 0)); then
+    die "error : no packages in '$repo_name'"
 fi
 
-for package_name in "${!packages[@]}"; do
+declare -a urls
+
+for package_name in "${package_names[@]}"; do
+    urls+=("$API_URL/$package_name")
+done
+
+index=0
+
+while IFS= read -r json; do
     declare -A candidate_versions
 
     while IFS= read -r candidate_version; do
+        # no empty versions
         if [[ $candidate_version ]]; then
             candidate_version=$(sanitize_version "$candidate_version")
-
             candidate_versions[$candidate_version]=
         fi
     done \
     <<< $(
+        # select non-outdated versions
         jq -r \
-        '.[] | select(
-            .status == "newest"
-        ) .version' \
-        <<< $(
-            curl -A "$USER_AGENT" -s "$API_URL/$package_name"
+            '.[] |
+            select(
+                .status == "newest"
+            ) .version' \
+            <<< $json
         )
-    )
-
-    package_version=$(sanitize_version "${packages[$package_name]}")
-
+    
     if ((${#candidate_version[@]} != 0)); then
+        package_name=${package_names[index]}
+        package_version=$(sanitize_version "${package_metadatas[$package_name]}")
         diff_version_flag=0
-
+        
         declare -a diff_version_parts
 
         for candidate_version in "${!candidate_versions[@]}"; do
             if [[ $candidate_version != $package_version ]]; then
                 diff_version_flag=1
-
                 diff_version_parts+=("$candidate_version")
             fi
         done
 
-        diff_version=${diff_version_parts[*]}
-
-        unset diff_version_parts
-
+        # only output if there is a difference
         if ((diff_version_flag == 1)); then
+            diff_version=${diff_version_parts[*]}
+
             printf '%s: %s -> %s\n' "$package_name" "$package_version" "$diff_version"
         fi
+
+        unset diff_version_parts
     fi
 
     unset candidate_versions
-done
+
+    ((++index))
+done <<< $(curl -A "$USER_AGENT" -w '\n' -s "${urls[@]}")
