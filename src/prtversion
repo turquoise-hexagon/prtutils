@@ -2,84 +2,112 @@
 #
 # prtversion - compare local versions to repology versions
 
+readonly USER_AGENT='camille at laserbat dot pw'
+readonly API_URL=https://repology.org/api/v1/project
+
 die() {
-    printf '%s\n' "${1:-usage : ${0##*/} <repo>}" >&2
+    printf '%s\n' "$1" >&2
 
     exit 1
 }
 
 sanitize_version() {
-    # remove extra characters
-    read -ra split <<< ${1//[^0-9]/ }
+    local _version
+    local _index
+    local _output
+    local -a _version_parts
 
-    # remove extra zeros
-    for index in "${!split[@]}"; {
-        [[ ${split[index]} =~ 0*(.+) ]] &&
-            split[index]=${BASH_REMATCH[1]}
-    }
+    _version=$1
 
-    # turn into a proper version string
-    str=${split[*]}
-    str=${str// /.}
+    read -r -a _version_parts <<< ${_version//[^0-9]/ }
 
-    # remove trailing zeros
-    while [[ $str =~ '.0'$ ]]; do
-        str=${str%.0}
+    for _index in "${!_version_parts[@]}"; do
+        if [[ ${_version_parts[_index]} =~ 0*(.+) ]]; then
+            _version_parts[_index]=${BASH_REMATCH[1]}
+        fi
     done
 
-    printf '%s\n' "$str"
+    _output=${_version_parts[*]}
+    _output=${_output// /.}
+    _output=${_output%.0}
+
+    printf '%s\n' "$_output"
 }
 
-# store list of package files
-while read -r path pkg; do
-    for repo; {
-        [[ ${path##*/} == "$repo" ]] && {
-            pkgfiles+=("$path/$pkg/Pkgfile")
-        }
-    }
-done <<< $(prt-get printf '%p %n\n')
+if (($# != 1)); then
+    die "usage : ${0##*/} <repo>"
+fi
 
-((${#pkgfiles[@]})) || die
+readonly repo=$1
 
-# store list of package versions
-for pkgfile in "${pkgfiles[@]}"; {
-    unset name commit version
+declare -A packages
 
-    . "$pkgfile" 2> /dev/null &&
-        # don't store git & commit packages
-        [[ ! $commit && $version != git ]] && {
-            pkgs+=("$name")
-            vers+=("$version")
-        }
-}
+while IFS=' ' read -r repo_path package_name; do
+    if [[ $repo_path =~ /$repo$ ]]; then
+        pkgfile_path=$repo_path/$package_name/Pkgfile
 
-# store a list of URLs
-for pkg in "${pkgs[@]}"; {
-    urls+=("https://repology.org/badge/latest-versions/$pkg.svg?header=")
-}
+        if [[ -f $pkgfile_path ]]; then
+            unset commit name version
 
-# parse svgs
-((index == 0))
+            if ! . "$pkgfile_path" &> /dev/null; then
+                die "error : failed to source '$pkgfile_path'"
+            fi
 
-while IFS= read -r line; do
-    [[ ${line##*middle\">} =~ ([^<, ]+) ]] && {
-        remote=${BASH_REMATCH[1]}
+            if [[ $version != git && ! $commit ]]; then
+                packages[$name]=$version
+            fi
+        fi
+    fi
+done \
+<<< $(prt-get printf '%p %n\n')
 
-        pkg=${pkgs[index]}
-        ver=${vers[index]}
+if ((${#packages[@]} == 0)); then
+    die "error : no packages found in '$repo'"
+fi
 
-        # take decision
-        case $(sanitize_version "$remote") in
-           '') out_u+=("$pkg : $ver -> $remote");;
-            "$(sanitize_version "$ver")") ;; # do nothing
-            *) out_m+=("$pkg : $ver -> $remote");;
-        esac
-    }
+for package_name in "${!packages[@]}"; do
+    declare -A candidate_versions
 
-    ((++index))
-done <<< $(curl -w '\n' -s "${urls[@]}")
+    while IFS= read -r candidate_version; do
+        if [[ $candidate_version ]]; then
+            candidate_version=$(sanitize_version "$candidate_version")
 
-# print everything
-for line in "${out_m[@]}" "${out_u[@]}"; {
-    printf '%s\n' "$line"
-}
+            candidate_versions[$candidate_version]=
+        fi
+    done \
+    <<< $(
+        jq -r \
+        '.[] | select(
+            .status == "newest"
+        ) .version' \
+        <<< $(
+            curl -A "$USER_AGENT" -s "$API_URL/$package_name"
+        )
+    )
+
+    package_version=$(sanitize_version "${packages[$package_name]}")
+
+    if ((${#candidate_version[@]} != 0)); then
+        diff_version_flag=0
+
+        declare -a diff_version_parts
+
+        for candidate_version in "${!candidate_versions[@]}"; do
+            if [[ $candidate_version != $package_version ]]; then
+                diff_version_flag=1
+
+                diff_version_parts+=("$candidate_version")
+            fi
+        done
+
+        diff_version=${diff_version_parts[*]}
+
+        unset diff_version_parts
+
+        if ((diff_version_flag == 1)); then
+            printf '%s: %s -> %s\n' "$package_name" "$package_version" "$diff_version"
+        fi
+    fi
+
+    unset candidate_versions
+done
