@@ -75,6 +75,7 @@ while IFS=' ' read -r repo_path package_name; do
             # no git package, no commit package
             if [[ $version != git && ! $commit ]]; then
                 package_metadatas[$name]=$version
+
                 package_names+=("$name")
             fi
         fi
@@ -100,6 +101,7 @@ while IFS= read -r json; do
         # no empty versions
         if [[ $candidate_version ]]; then
             candidate_version=$(sanitize_version "$candidate_version")
+
             candidate_versions[$candidate_version]=
         fi
     done \
@@ -123,6 +125,7 @@ while IFS= read -r json; do
         for candidate_version in "${!candidate_versions[@]}"; do
             if [[ $candidate_version != $package_version ]]; then
                 diff_version_flag=1
+
                 diff_version_parts+=("$candidate_version")
             fi
         done
