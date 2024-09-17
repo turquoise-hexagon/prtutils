@@ -59,6 +59,7 @@ readonly repo_name=$1
 
 declare -A package_metadatas
 declare -a package_names
+declare -a urls
 
 while IFS=' ' read -r repo_path package_name; do
     # select only relevant packages
@@ -77,6 +78,7 @@ while IFS=' ' read -r repo_path package_name; do
                 package_metadatas[$name]=$version
 
                 package_names+=("$name")
+                urls+=("$API_URL/$package_name")
             fi
         fi
     fi
@@ -85,12 +87,6 @@ done <<< $(prt-get printf '%p %n\n')
 if ((${#package_names[@]} == 0)); then
     die "error : no packages in '$repo_name'"
 fi
-
-declare -a urls
-
-for package_name in "${package_names[@]}"; do
-    urls+=("$API_URL/$package_name")
-done
 
 index=0
 
