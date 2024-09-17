@@ -78,7 +78,7 @@ while IFS=' ' read -r repo_path package_name; do
                 package_metadatas[$name]=$version
 
                 package_names+=("$name")
-                urls+=("$API_URL/$package_name")
+                urls+=("$API_URL/$name")
             fi
         fi
     fi
