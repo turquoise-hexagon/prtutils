@@ -6,8 +6,9 @@
 # settings
 # ---
 
-readonly USER_AGENT='camille at laserbat dot pw'
 readonly API_URL=https://repology.org/api/v1/project
+readonly CURL_AGENT='camille at laserbat dot pw'
+readonly CURL_RATE=1/s
 
 # ---
 # functions
@@ -138,4 +139,10 @@ while IFS= read -r json; do
     unset candidate_versions
 
     ((++index))
-done <<< $(curl -A "$USER_AGENT" -w '\n' -s "${urls[@]}")
+done <<< $(
+    curl \
+        --write-out '\n' \
+        --rate "$CURL_RATE" \
+        --user-agent "$CURL_AGENT" \
+        --silent "${urls[@]}"
+)
