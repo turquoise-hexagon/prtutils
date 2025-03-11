@@ -10,7 +10,7 @@ MAN = $(RST:.rst=.1.gz)
 all : $(MAN)
 
 doc/%.1.gz : doc/%.rst
-	rst2man.py $< | gzip -9 > $@
+	rst2man $< | gzip -9 > $@
 
 clean :
 	rm -f $(MAN)
