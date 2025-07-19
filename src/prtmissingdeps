@@ -7,7 +7,7 @@ declare -A installed aliases missing
 # store aliases
 while IFS=': ' read -r alias orig; do
     aliases[$alias]=$orig
-done < /var/lib/pkg/prt-get.aliases
+done < /etc/prt-get.aliases
 
 list=$(prt-get listinst)
 
