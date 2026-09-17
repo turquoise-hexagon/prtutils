@@ -11,5 +11,5 @@ die() {
     die 'error : no Pkgfile to update'
 
 for opt in do us d uf us; do
-    fakeroot pkgmk -"$opt"
+    rootlesskit pkgmk -"$opt"
 done
